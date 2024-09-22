@@ -76,18 +76,39 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'voice_of_kingdom.wsgi.application'
-
+import dj_database_url
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+import django_heroku
+django_heroku.settings(locals())
+import dotenv
 
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
+    
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+
+# This should already be in your settings.py
+django_heroku.settings(locals())
+
+# Add these at the very last line of settings.py
+options = DATABASES['default'].get('OPTIONS', {})
+options.pop('sslmode', None)
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgres://ufajj7nf2cadnk:p25c1c080a8699d13d3d4fb4a3c616ba358eb044f68f225c464cc0a96edca54a1@c9uss87s9bdb8n.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/dclj7920e97ek5'
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -145,3 +166,6 @@ EMAIL_HOST_USER = 'tatvajoshi2000@gmail.com'
 EMAIL_HOST_PASSWORD = 'hxql etqq guei opgr'
 DEFAULT_FROM_EMAIL = 'tatvajoshi2000@gmail.com'
 ADMIN_EMAIL='tatvajoshi0@gmail.com'
+
+
+
