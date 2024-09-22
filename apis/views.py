@@ -14,8 +14,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import Table, TableStyle
 from reportlab.lib import colors
 import logging
-from django.views.decorators.csrf import csrf_exempt
-@csrf_exempt
+
 class BookingView(APIView):
     def post(self, request):
         try:
@@ -94,7 +93,6 @@ class BookingView(APIView):
         buffer.seek(0)
         return buffer
     
-@csrf_exempt
 class ContactSubmissionView(APIView):
     def post(self, request):
         serializer = ContactSubmissionSerializer(data=request.data)
@@ -120,7 +118,6 @@ class SubscribeView(APIView):
             serializer.save()
             return Response({"message": "Subscription successful"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class DocumentUploadView(APIView):
     def post(self, request):
