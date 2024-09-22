@@ -1,0 +1,29 @@
+.watch-more-button {
+    background: none;
+    border: none;
+    color: #443f3f;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    padding: 10px 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 0px; 
+    transition: color 0.3s ease;
+  }
+  
+  .watch-more-button:hover {
+    color: #fac039;
+  }
+  
+  .watch-more-button:after {
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+  }
+  
+  .watch-more-button:hover:after {
+    transform: translateX(5px);
+  }
+  

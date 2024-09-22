@@ -1,0 +1,7 @@
+music-artist-website/node_modules
+# production
+music-artist-website/build
+
+__pycache__/
+ *.pyc
+

@@ -1,0 +1,71 @@
+.biography-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    line-height: 1.6;
+    background: #ecebdc;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .biography-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .biography-header h1 {
+    font-size: 3.5em;
+    margin: 0;
+    color: #2c3e50;
+  }
+  
+  .biography-header h2 {
+    font-size: 1.0em;
+    margin: 0;
+    color: #34495e;
+  }
+  
+  .biography-content {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 75px;
+    margin-right: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .bio-text {
+    flex: 1;
+  }
+  
+  .biography-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1em;
+  }
+  
+  .biography-footer a {
+    color: #2980b9;
+    text-decoration: none;
+  }
+  
+  .biography-footer a:hover {
+    text-decoration: underline;
+  }
+  .drop-cap {
+    position: relative;
+  }
+  
+  .drop-cap-letter {
+    float: left;
+    font-size: 3em;
+    line-height: 0.8;
+    margin-right: 0.1em;
+    font-weight: bold;
+  }

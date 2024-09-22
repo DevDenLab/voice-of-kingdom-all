@@ -1,0 +1,158 @@
+.booking-form-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #dfe2e2;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.form-header h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.form-header p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.progress-bar {
+  background-color: #e0e0e0;
+  height: 6px;
+  border-radius: 3px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.progress {
+  background-color: #4caf50;
+  height: 100%;
+  transition: width 0.3s ease-in-out;
+}
+
+.step-indicator {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: #4caf50;
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.input-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  width: 90%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+  outline: none;
+  border-color: #4caf50;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 0.5rem;
+  width: auto;
+}
+
+.required {
+  color: #f44336;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.button-group button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button-back {
+  background-color: #f44336;
+  color: white;
+}
+
+.button-next,
+.button-submit {
+  background-color: #4caf50;
+  color: white;
+}
+
+.button-back:hover {
+  background-color: #d32f2f;
+}
+
+.button-next:hover,
+.button-submit:hover {
+  background-color: #45a049;
+}
+
+@media (max-width: 600px) {
+  .booking-form-container {
+    padding: 1rem;
+    margin: 1rem;
+  }
+
+  .input-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .button-group button {
+    width: 48%;
+  }
+
+  .input-group input,
+  .input-group select,
+  .input-group textarea {
+    font-size: 16px; /* Prevents zoom on mobile */
+  }
+}
