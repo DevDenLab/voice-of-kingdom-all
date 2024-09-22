@@ -11,7 +11,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={
           <Layout
-            backgroundImage="/sample_artist.jpg"
+            backgroundImage="/static/sample_artist.jpg"
             overlayText="Welcome to VOK"
             textColor="white"
           >
@@ -20,7 +20,7 @@ const AppRoutes = () => {
         } />
         <Route path="/contactus" element={
           <Layout
-            backgroundImage="/contactus.jpg"
+            backgroundImage="/static/contactus.jpg"
             overlayText=""
             textColor="#FFD700"
           >
@@ -29,7 +29,7 @@ const AppRoutes = () => {
         }/>
         <Route path="/music/bookings" element={
           <Layout
-            backgroundImage="/music_book.jpg"
+            backgroundImage="/static/music_book.jpg"
             overlayText=""
             textColor="#FFD700"
           >
@@ -38,7 +38,7 @@ const AppRoutes = () => {
         }/>
         <Route path="/biography" element={
           <Layout
-            backgroundImage="/biography.jpg"
+            backgroundImage="/static/biography.jpg"
             overlayText=""
             textColor="#FFD700"
           >

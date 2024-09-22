@@ -27,7 +27,7 @@ const ArtistSection = () => {
         <Grid item xs={12} md={5} sx={{ p: { xs: 2, md: 4 } }}>
           <Box
             component="img"
-            src="/sample_artist.jpg" // replace with your image path
+            src="/static/sample_artist.jpg" // replace with your image path
             alt="Artist"
             sx={{
               width: '100%',

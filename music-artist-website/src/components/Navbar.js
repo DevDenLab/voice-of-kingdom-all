@@ -197,7 +197,7 @@ const Navbar = ({ backgroundImage, overlayText, textColor }) => {
           >
             <Box
               component="img"
-              src="/favicon.jpg"
+              src="/static/favicon.jpg"
               alt="VOK LOGO"
               sx={{
                 position: 'absolute',

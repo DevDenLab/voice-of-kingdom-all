@@ -10,12 +10,12 @@ const PhotoGallery = () => {
     navigate('/gallery'); // Change this to the desired route
   };
   const images = [
-    { src: "/sample_artist.jpg", alt: "Gallery 1" },
-    { src: "/sample_artist.jpg", alt: "Gallery 2" },
-    { src: "/sample_artist.jpg", alt: "Gallery 3" },
-    { src: "/sample_artist.jpg", alt: "Gallery 4" },
-    { src: "/sample_artist.jpg", alt: "Gallery 5" },
-    { src: "/sample_artist.jpg", alt: "Gallery 6" }
+    { src: "/static/sample_artist.jpg", alt: "Gallery 1" },
+    { src: "/static/sample_artist.jpg", alt: "Gallery 2" },
+    { src: "/static/sample_artist.jpg", alt: "Gallery 3" },
+    { src: "/static/sample_artist.jpg", alt: "Gallery 4" },
+    { src: "/static/sample_artist.jpg", alt: "Gallery 5" },
+    { src: "/static/sample_artist.jpg", alt: "Gallery 6" }
   ];
 
   return (
