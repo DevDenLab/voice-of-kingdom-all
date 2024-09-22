@@ -28,7 +28,7 @@ const Footer = () => {
 
     try {
       // Example API request to subscribe
-      const response = await axios.post('http://127.0.0.1:8000/api/subscribe/', { email }); // Change to the correct API endpoint
+      const response = await axios.post('/api/subscribe/', { email }); // Change to the correct API endpoint
 
       if (response.status === 201) {
         setSuccessMessage('Subscribed!');

@@ -97,7 +97,7 @@ const BookingForm = () => {
 
     try {
       console.log("Sending data to API:", formData);
-      const response = await axios.post('http://127.0.0.1:8000/api/booking/', formData);
+      const response = await axios.post('/api/booking/', formData);
       console.log("API response:", response);
       if (response.status === 201) {
         console.log("Form submitted successfully");
