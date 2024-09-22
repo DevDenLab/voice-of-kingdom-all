@@ -97,7 +97,8 @@ if os.path.isfile(dotenv_file):
     
 DATABASES = {}
 DATABASES['default'] = dj_database_url.config(conn_max_age=600)
-
+CSRF_TRUSTED_ORIGINS = ['http://localhost','https://localhost']
+CSRF_COOKIE_SECURE = False
 # This should already be in your settings.py
 django_heroku.settings(locals())
 
