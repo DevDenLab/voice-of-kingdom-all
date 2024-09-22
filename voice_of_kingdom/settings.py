@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-*jrahpi*$ba1^y&l&4de!gvlggtye$*5zjk-dmjuw%u#srf)&0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOW_ALL_ORIGINS = True
 # Application definition
@@ -61,7 +61,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR,"music-artist-website/build")    
+            # os.path.join(BASE_DIR,"music-artist-website/build")    
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -151,11 +151,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_DIRS=[
-    os.path.join(BASE_DIR,"music-artist-website/build/static"),
-]
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# STATICFILES_DIRS=[
+#     os.path.join(BASE_DIR,"music-artist-website/build/static"),
+# ]
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
