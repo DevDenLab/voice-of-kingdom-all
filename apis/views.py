@@ -113,7 +113,6 @@ class ContactSubmissionView(APIView):
             return Response({"message": "Form submitted successfully"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-@csrf_exempt
 class SubscribeView(APIView):
     def post(self, request):
         serializer = SubscriberSerializer(data=request.data)
