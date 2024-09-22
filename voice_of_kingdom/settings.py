@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ['*']
 CORS_ALLOW_ALL_ORIGINS = True
 # Application definition
 CORS_ALLOWED_ORIGINS = [
-    "http://*","https://*"
+    "https://*",
 ]
 INSTALLED_APPS = [
     'django.contrib.admin',
