@@ -122,7 +122,7 @@ class SubscribeView(APIView):
             return Response({"message": "Subscription successful"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@csrf_exempt
+
 class DocumentUploadView(APIView):
     def post(self, request):
         serializer = DocumentSerializer(data=request.data)
