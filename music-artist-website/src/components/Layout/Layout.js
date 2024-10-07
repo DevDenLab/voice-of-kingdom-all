@@ -1,12 +1,12 @@
 // Layout.js
-import React from 'react';
-import Navbar from './Navbar';
-import Footer from './Footer'
+import React from "react";
+import Navbar from "../Navbar";
+import Footer from "../Footer";
 
 const Layout = ({ children, backgroundImage, overlayText, textColor }) => {
   return (
     <div>
-      <Navbar 
+      <Navbar
         backgroundImage={backgroundImage}
         overlayText={overlayText}
         textColor={textColor}
