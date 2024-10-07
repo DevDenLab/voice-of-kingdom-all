@@ -14,7 +14,55 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import Table, TableStyle
 from reportlab.lib import colors
 import logging
+from rest_framework import viewsets
+from .models import MembershipApplication
+from .serializers import MembershipApplicationSerializer
 
+class MembershipApplicationViewSet(viewsets.ModelViewSet):
+    queryset = MembershipApplication.objects.all()
+    serializer_class = MembershipApplicationSerializer
+
+    def create(self, request, *args, **kwargs):
+        # Save the form data
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        # Generate PDF from the form data
+        pdf_buffer = BytesIO()
+        p = canvas.Canvas(pdf_buffer)
+
+        form_data = serializer.data
+        p.drawString(100, 800, f"Full Name: {form_data['full_name']}")
+        p.drawString(100, 780, f"Age: {form_data['age']}")
+        p.drawString(100, 760, f"Gender: {form_data['gender']}")
+        p.drawString(100, 740, f"Nationality: {form_data['nationality']}")
+        p.drawString(100, 720, f"Address: {form_data['address']}")
+        p.drawString(100, 700, f"Phone Number: {form_data['phone_number']}")
+        p.drawString(100, 680, f"Email Address: {form_data['email_address']}")
+        # Add more fields as needed...
+        p.showPage()
+        p.save()
+
+        pdf_buffer.seek(0)
+
+        # Create email
+        email = EmailMessage(
+            'New Membership Application',
+            'A new membership application has been submitted. Please find the attached PDF.',
+            settings.DEFAULT_FROM_EMAIL,
+            [settings.ADMIN_EMAIL]
+        )
+
+        # Attach the generated PDF
+        email.attach('membership_application.pdf', pdf_buffer.getvalue(), 'application/pdf')
+
+        # Send email
+        email.send()
+
+        # Return the response
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
 class BookingView(APIView):
     def post(self, request):
         try:

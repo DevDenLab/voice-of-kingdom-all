@@ -1,0 +1,146 @@
+/* General Styles */
+.vok-music-page {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    background-color: #f9f9f9;
+    padding: 20px;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    background-color: #fff0e5;
+    padding: 40px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .artist-photo {
+    width: 250px;
+    height: auto;
+    border-radius: 50%;
+    margin-right: 40px;
+    flex-shrink: 0;
+  }
+  
+  .bio-content {
+    max-width: 600px;
+  }
+  
+  .bio-content h1 {
+    font-size: 3rem;
+    color: #333;
+  }
+  
+  .bio-content p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-top: 20px;
+  }
+  
+  /* Music Catalog */
+  .music-catalog {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  
+  .music-catalog h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+  }
+  
+  .catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  .music-item {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .album-cover {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .music-item h3 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+  }
+  
+  .stream-button {
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .stream-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Streaming Links Section */
+  .streaming-links {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  
+  .streaming-links h2 {
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+  }
+  
+  .streaming-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  
+  .streaming-buttons a {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    color: white;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Streaming Platforms Colors */
+  .spotify { background-color: #1DB954; }    /* Spotify Green */
+  .apple-music { background-color: #FA233B; } /* Apple Music Red */
+  .youtube { background-color: #FF0000; }     /* YouTube Red */
+  .amazon-music { background-color: #FF9900; }/* Amazon Music Orange */
+  
+  /* Hover Effect */
+  .streaming-buttons a:hover {
+    opacity: 0.8;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero-section {
+      flex-direction: column;
+      text-align: center;
+    }
+    .artist-photo {
+      margin: 0 auto 30px auto;
+    }
+    .bio-content {
+      margin-top: 20px;
+    }
+  }
+  

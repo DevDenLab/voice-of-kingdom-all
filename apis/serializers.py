@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Subscriber, Document, Contact, Booking
-
+from .models import MembershipApplication
 class SubscriberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscriber
@@ -26,3 +26,8 @@ class BookingSerializer(serializers.ModelSerializer):
         if value and not value.startswith(('http://', 'https://')):
             raise serializers.ValidationError("Enter a valid URL starting with 'http://' or 'https://'")
         return value
+    
+class MembershipApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MembershipApplication
+        fields = '__all__'

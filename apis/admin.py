@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Subscriber, Document, Booking
+from .models import Subscriber, Document, Booking,MembershipApplication
 
 @admin.register(Subscriber)
 class SubscriberAdmin(admin.ModelAdmin):
@@ -52,3 +52,13 @@ class BookingAdmin(admin.ModelAdmin):
         if obj:  # editing an existing object
             return self.readonly_fields + ('agreement1', 'agreement2')
         return self.readonly_fields
+    
+from .models import MembershipApplication
+
+class MembershipApplicationAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'email_address', 'phone_number', 'age', 'gender', 'nationality', 'is_christian')
+    search_fields = ('full_name', 'email_address', 'phone_number', 'nationality')
+    list_filter = ('gender', 'is_christian', 'formal_music_training', 'can_read_music', 'live_performance_experience')
+    readonly_fields = ('date',)
+
+admin.site.register(MembershipApplication, MembershipApplicationAdmin)

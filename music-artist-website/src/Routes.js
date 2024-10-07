@@ -4,6 +4,7 @@ import Contact from './components/Contact';
 import Layout from './components/Layout';
 import BookingForm from './components/BookingForm';
 import Biography from './components/Biography';
+import Music from './components/Music';
 
 const AppRoutes = () => {
   return (
@@ -43,6 +44,15 @@ const AppRoutes = () => {
             textColor="#FFD700"
           >
             <Biography />
+          </Layout>
+        }/>
+        <Route path="/music" element={
+          <Layout
+            backgroundImage="/static/biography.jpg"
+            overlayText=""
+            textColor="#FFD700"
+          >
+            <Music />
           </Layout>
         }/>
       </Routes>
