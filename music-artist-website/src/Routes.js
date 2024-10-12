@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./Landing/Home";
+import"./App.css";
+import Home from "./Pages/Landing/Home";
 import Contact from "./components/Contact";
 import Layout from "./components/Layout/Layout";
 import BookingForm from "./components/BookingForm";
@@ -12,13 +13,15 @@ const AppRoutes = () => {
         <Route
           path="/"
           element={
-            <Layout
-              backgroundImage="/static/sample_artist.jpg"
-              overlayText="Welcome to VOK"
-              textColor="white"
-            >
-              <Home />
-            </Layout>
+            <Home />
+            // <Layout
+            //   backgroundImage="/static/contactus.jpg"
+            //   overlayText=""
+            //   textColor="#FFD700"
+            // >
+              
+            // </Layout>
+           
           }
         />
         <Route

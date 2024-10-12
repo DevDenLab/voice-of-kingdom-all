@@ -1,0 +1,20 @@
+.Landing-header{
+    background-image: url("../../../public/static/backgorund.svg");
+    height: 70vh;
+    background-size:cover;
+    color: azure;
+}
+
+.landing-txt{
+    justify-content: center;
+    justify-items: center;
+    padding: 5%;
+    /* padding-right: 20vh;
+    padding-top: 10vh;
+    padding-left: 5vh;
+    padding-bottom: 20vh; */
+}
+
+.landing-txt h1 {
+    font-size: 50px;
+}
