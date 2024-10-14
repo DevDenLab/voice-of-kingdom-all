@@ -174,4 +174,8 @@ DEFAULT_FROM_EMAIL = 'tatvajoshi2000@gmail.com'
 ADMIN_EMAIL='tatvajoshi0@gmail.com'
 
 
-
+import os 
+if os.getcwd()=='/app':
+    SECURE_PROXY_SSL_HEADER=('HTTP_X_FORWARDED_PROTO','https')
+    SECURE_SSL_REDIRECT=True
+    DEBUG=False
