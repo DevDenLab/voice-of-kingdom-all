@@ -2,12 +2,13 @@ import React from "react";
 import "./Home.css";
 // import Navbar from './Navbar';
 import ArtistSection from "../../components/ArtistSection/ArtistSection";
-import VideoSection from "../../components/VideoSection";
+import VideoSection from "../../components/VideoSection/VideoSection";
 import SpotifySection from "../../components/SpotifySection";
 import PhotoGallery from "../../components/PhotoGallery";
 import MapSection from "../../components/MapSection";
 import NavB from "../../components/Navbar/NavB";
 import Navbar from "../../components/Navbar/Navbar";
+import Footer from "../../components/Footer/Footer";
 const Home = () => {
   return (
     <div className="">
@@ -21,13 +22,14 @@ const Home = () => {
           </p>
         </div>
       </header>
-      <div className="">
+      <div className="cont">
         <ArtistSection />
         <VideoSection />
-        <SpotifySection />
-        <PhotoGallery />
-        <MapSection />
+        {/* <SpotifySection /> */}
+        {/* <PhotoGallery /> */}
+        {/* <MapSection /> */}
       </div>
+      <Footer />
     </div>
   );
 };

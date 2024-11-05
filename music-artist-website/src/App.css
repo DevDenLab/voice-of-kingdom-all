@@ -1,13 +1,13 @@
 .App {
-  display: flex;
+  /* display: flex; */
   text-align: center;
-  justify-content: center;
+  /* justify-content: center; */
 }
 
 h1 {
-  font-size: xx-large;
+  font-size: 2.5rem;
   font-weight: 600;
-  color: #cc9600;
+  color: #000000;
 }
 
 .App-logo {

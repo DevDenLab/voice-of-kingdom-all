@@ -1,0 +1,53 @@
+.footer-cont {
+  padding-top: 20px;
+  background-color: black;
+  color: white;
+}
+
+.footer-header {
+  color: #cc9600;
+}
+.form {
+  align-items: center;
+}
+
+.icon-cont {
+  margin-top: 15px;
+}
+
+.contact {
+  text-align: left;
+}
+
+.contact a {
+  color: #cc9600;
+}
+.form {
+  display: flex;
+  align-items: center;
+}
+.form input {
+  background-color: white;
+  padding: 5px;
+
+  border-radius: 10px;
+}
+.form button {
+  border: solid 2px #cc9600;
+  color: white;
+  border-radius: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-left: 10px;
+}
+.form button:hover {
+  border: solid 2px #cc9600;
+  background-color: #cc9600;
+  color: #ffffff;
+}
+.f-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin: 2%;
+}

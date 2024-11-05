@@ -18,7 +18,7 @@
   margin: auto;
 }
 .nav-text li {
-  font-size: 1.5vw;
+  font-size: 1.2vw;
   padding: 0 12px;
   margin: auto;
 }
@@ -40,8 +40,9 @@
 }
 
 .logo {
-  height: 90px;
-  max-width: 90px;
+  height: 110px;
+  max-width: 110px;
+  border-radius: 50%;
   /* margin: auto; */
   /* justify-content: center; */
 }
@@ -92,6 +93,15 @@
 
   .mobile-right ul {
     transition: 0.5s ease-in-out;
+  }
+
+  .logo2 {
+    padding: 20px;
+    height: 25%;
+    max-width: 25%;
+    border-radius: 50%;
+    /* margin: auto; */
+    /* justify-content: center; */
   }
 
   .isclosed {

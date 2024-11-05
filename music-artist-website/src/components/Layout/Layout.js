@@ -2,12 +2,12 @@
 import React from "react";
 import Navbar from "../Navbar/Navbar";
 import NavB from "../Navbar/NavB";
-import Footer from "../Footer";
+import Footer from "../Footer/Footer";
 
 const Layout = ({ children, backgroundImage, overlayText, textColor }) => {
   return (
     <div>
-      <NavB/>
+      <NavB />
       {/* <Navbar
         backgroundImage={backgroundImage}
         overlayText={overlayText}

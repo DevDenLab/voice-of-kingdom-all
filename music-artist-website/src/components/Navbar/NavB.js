@@ -59,7 +59,7 @@ const NavB = () => {
 
       <div className="mobile-nav">
         <div className="mobile-left">
-          <img src="/static/favicon.jpg" alt="VOKIM" />
+          <img src="/static/favicon.jpg" alt="VOKIM" className="logo2" />
         </div>
         <div className={`${!isOpen ? "isclosed" : "mobile-right"}`}>
           <button onClick={toggleDrawer}>
