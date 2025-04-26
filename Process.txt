@@ -1,0 +1,19 @@
+1)git pull and git checkout develop
+1)after all the changes->build it->npm run build
+2)cd ..
+3)python manage.py collectstatic->from root directory
+4)make sure to commit everything and push to develop branch
+
+Test 1 2
+
+
+postgres connection string:
+postgres://ufajj7nf2cadnk:p25c1c080a8699d13d3d4fb4a3c616ba358eb044f68f225c464cc0a96edca54a1@c9uss87s9bdb8n.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/dclj7920e97ek5
+
+
+Host:c9uss87s9bdb8n.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com
+Database:dclj7920e97ek5
+User:ufajj7nf2cadnk
+Port:5432
+Password:p25c1c080a8699d13d3d4fb4a3c616ba358eb044f68f225c464cc0a96edca54a1
+URI:postgres://ufajj7nf2cadnk:p25c1c080a8699d13d3d4fb4a3c616ba358eb044f68f225c464cc0a96edca54a1@c9uss87s9bdb8n.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/dclj7920e97ek5

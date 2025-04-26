@@ -1,0 +1,94 @@
+/* DonationPage.css */
+.donation-container {
+    min-height: 100vh;
+    padding: 20px;
+    background: linear-gradient(to bottom, #a78b53, #ffffff);
+    font-family: Arial, sans-serif;
+    z-index: -1;
+    margin-top: -50px;
+    position: relative;
+  }
+  
+  .donation-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    margin-top: 180px;
+  }
+  
+  .donation-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .donation-title {
+    font-size: 2.5rem;
+    color: rgb(255, 235, 107);
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  
+  .donation-card-container {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr;
+  }
+  
+  .donation-card {
+    background-color: hsl(51, 42%, 91%);
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .donation-card:hover {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .blue-card {
+    background-color: hsl(51, 42%, 91%);
+    color: #ffffff;
+  }
+  
+  .quote-card-donate {
+    background-color: #f0f7ff;
+    font-style: italic;
+    text-align: center;
+  }
+  
+  .gradient-card {
+    background: linear-gradient(to right, #f0f7ff, #e0f0ff);
+  }
+  
+  .donation-paragraph {
+    line-height: 1.6;
+    color: #374151;
+    margin-bottom: 16px;
+  }
+  
+  .mail-section {
+    background-color: #8d8d7e;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 12px;
+  }
+  
+  .citation {
+    font-size: 0.875rem;
+    font-weight: bold;
+    margin-top: 8px;
+  }
+  
+  .card-subtitle {
+    font-size: 1.5rem;
+    color: #f7ae1d;
+    margin-bottom: 16px;
+  }
+  
+  .quote-paragraph {
+    color: #1e40af;
+  }
+  
+  .thank-you-paragraph {
+    text-align: center;
+  }

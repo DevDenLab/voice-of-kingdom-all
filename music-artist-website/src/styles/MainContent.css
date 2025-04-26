@@ -1,0 +1,443 @@
+/* Home Page Styles */
+.home-page {
+  width: 100%;
+  padding-top: 65px; /* Height of navbar */
+  background: #f8fafc;
+  min-height: 90vh;
+}
+
+/* Hero Section */
+.hero-section-home {
+  position: relative;
+  height: 87vh; /* Full viewport height */
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Center content vertically */
+  align-items: flex-start; /* Align content to the left */
+  overflow: hidden;
+  padding: 0 1rem; /* Add horizontal padding */
+  padding-top: 5rem; /* Add some space from the top */
+}
+
+.content-wrapper-home {
+  margin: 0 1rem; /* Reduce the margin to move content closer to the left */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align items to the left */
+  justify-content: flex-start; /* Align content at the top */
+  padding-left: 0; /* Remove left padding */
+  width: 100%; /* Ensure full width */
+  padding-top: 0; /* Explicitly remove top padding */
+}
+
+.hero-overlay-home {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: none; /* Remove the max-width to allow full width */
+  margin-left: 0; /* Remove any margin */
+  margin-right: 0; /* Remove any margin */
+  margin-top: 0; /* Explicitly remove top margin */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align items to the left */
+  justify-content: flex-start;
+  padding: 0 1rem; /* Add padding to prevent content from touching edges */
+  padding-bottom: 70px; /* Explicitly remove top padding */
+}
+
+/* Countdown Timer Styles */
+.countdown-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem; /* Increased spacing */
+  margin-top: 0; /* Explicitly remove top margin */
+  z-index: 1;
+}
+
+.countdown-title {
+  font-size: 1.5rem; /* Increased font size */
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.75rem; /* Increased spacing */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  letter-spacing: 1px;
+  font-family: 'Poppins', sans-serif;
+  margin-top: 3rem;
+}
+
+.countdown-timer {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem; /* Increased gap between items */
+}
+
+.countdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  padding: 0.75rem; /* Increased padding */
+  min-width: 70px; /* Increased width */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 226, 112, 0.5);
+}
+
+.countdown-value {
+  font-size: 2rem; /* Increased font size */
+  font-weight: 700;
+  color: rgb(255, 226, 112);
+  line-height: 1;
+}
+
+.countdown-label {
+  font-size: 0.875rem; /* Increased font size */
+  color: white;
+  margin-top: 0.4rem; /* Increased spacing */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.main-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  color: rgb(255, 226, 112);
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  padding-bottom: 0.5rem;
+  margin-left: 3rem; /* Shift it even further left */
+  width: 100%; /* Ensure proper text wrapping */
+}
+
+.hero-text {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  max-width: 600px;
+  margin-top: 1rem;
+  font-weight: 500;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  color: rgb(253, 230, 137);
+  position: relative;
+  z-index: 1;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  padding-bottom: 0.5rem;
+  margin-left: 3rem; /* Shift it even further left */
+  
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2.5rem;
+  color: rgb(177, 190, 63);
+  cursor: pointer;
+  animation: bounce 2s infinite;
+  z-index: 2; /* Ensure it's above other content */
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(10px);
+  }
+}
+/* Adjust for wider screens */
+@media (min-width: 1024px) {
+  .hero-section-home {
+    justify-content: center; /* Center content vertically for wider screens */
+    padding-top: 0; /* Remove extra top padding */
+  }
+
+  .hero-content {
+    padding-bottom: 5rem; /* Reduce bottom padding */
+  }
+}
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .main-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-text {
+    font-size: 1rem;
+  }
+  
+  .content-wrapper-home {
+    margin: 0 1rem;
+  }
+  
+  .countdown-item {
+    min-width: 65px;
+    padding: 0.75rem;
+  }
+  
+  .countdown-value {
+    font-size: 1.85rem;
+  }
+}
+
+/* Samsung phones and general mobile styles */
+@media (max-width: 768px) {
+  .hero-section-home {
+    height: 90vh;
+    background-attachment: scroll;
+    align-items: flex-start; /* Align to top */
+    padding-top: 30px; /* Add some space from the very top */
+  }
+  
+  .content-wrapper-home {
+    margin: 0;
+    padding-top: 0;
+  }
+  
+  .hero-content {
+    padding: 0 1rem;
+    padding-top: 0;
+    margin-top: 0;
+  }
+
+  .main-title {
+    font-size: 2rem;
+    margin-left: 0;
+  }
+
+  .hero-text {
+    font-size: 0.875rem;
+    margin-top: 0.75rem;
+    margin-left: 0;
+  }
+
+  .scroll-indicator {
+    font-size: 2rem;
+    bottom: 5%;
+  }
+  
+  .countdown-container {
+    margin-bottom: 5.5rem;
+    margin-top: 0;
+  }
+  
+  .countdown-timer {
+    gap: 0.75rem;
+  }
+  
+  .countdown-item {
+    min-width: 60px;
+    padding: 0.6rem;
+  }
+  
+  .countdown-value {
+    font-size: 1.75rem;
+  }
+  
+  .countdown-label {
+    font-size: 0.75rem;
+  }
+  
+  .countdown-title {
+    font-size: 1.25rem;
+  }
+}
+
+/* Fix for larger screens like iPhone Pro Max, Samsung S21+, etc. */
+@media screen and (min-width: 481px) and (max-width: 896px) {
+  .hero-section-home {
+    align-items: flex-start !important;
+    padding-top: 20px !important; /* Minimal top space */
+  }
+  
+  .content-wrapper-home, 
+  .hero-content, 
+  .countdown-container {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  
+  /* Increase text sizes for larger mobile screens */
+  .countdown-title {
+    font-size: 1.7rem !important;
+  }
+  
+  .countdown-value {
+    font-size: 2.2rem !important;
+  }
+  
+  .countdown-label {
+    font-size: 1rem !important;
+  }
+  
+  .countdown-item {
+    min-width: 75px !important;
+    padding: 0.8rem !important;
+  }
+  
+  .countdown-timer {
+    gap: 1rem !important;
+  }
+  
+  .main-title {
+    font-size: 2.2rem !important;
+  }
+  
+  .hero-text {
+    font-size: 1.1rem !important;
+  }
+}
+
+/* Fix for Samsung and similar devices */
+@media screen and (min-width: 360px) and (max-width: 480px) {
+  .hero-section-home {
+    min-height: 75vh; /* Reduce minimum height */
+    max-height: 85vh; /* Set maximum height */
+    padding-top: 40px; /* Add more top padding */
+    padding-bottom: 40px; /* Adjust bottom padding */
+  }
+  .scroll-indicator {
+    bottom: 10%; /* Move closer to the last line of text */
+  }
+  .countdown-item {
+    min-width: 65px !important; /* Increased */
+    padding: 0.6rem !important; /* Increased */
+  }
+  
+  .countdown-value {
+    font-size: 1.8rem !important; /* Increased */
+  }
+  
+  .countdown-label {
+    font-size: 0.85rem !important; /* Increased */
+  }
+  
+  .countdown-timer {
+    gap: 0.8rem !important; /* Increased */
+  }
+  
+  .countdown-title {
+    font-size: 1.4rem !important; /* Increased */
+  }
+  
+  .main-title {
+    font-size: 1.6rem !important; /* Increased */
+  }
+  /* .countdown-container{
+    margin-bottom: 2rem;
+  } */
+  .hero-text {
+    font-size: 1rem !important; /* Increased */
+    margin-bottom: 1rem; /* Add spacing below the text */
+  }
+}
+
+/* Fix for smaller mobile screens */
+@media (max-width: 480px) {
+  .hero-section-home {
+    height: 90vh;
+    align-items: flex-start;
+    padding-top: 50px; /* Add more top padding */
+    padding-bottom: 30px; /* Adjust bottom padding */
+  }
+  
+  .hero-content {
+    padding: 0 0.5rem;
+    padding-top: 0;
+    margin-top: 0;
+  }
+  
+  .content-wrapper-home {
+    margin: 0;
+    padding-top: 0;
+  }
+  
+  .main-title {
+    font-size: 1.75rem;
+    margin-left: 0;
+  }
+
+  .hero-text {
+    font-size: 0.9rem; /* Increased */
+    margin-left: 0;
+    margin-bottom: 1rem; /* Add spacing below the text */
+  }
+
+  .scroll-indicator {
+    font-size: 1.5rem;
+    bottom: 8%; /* Move closer to the last line of text */
+  }
+  
+  .countdown-timer {
+    gap: 0.7rem; /* Increased */
+  }
+  
+  .countdown-item {
+    min-width: 60px; /* Increased */
+    padding: 0.5rem; /* Increased */
+  }
+  
+  .countdown-value {
+    font-size: 1.7rem; /* Increased */
+  }
+  
+  .countdown-label {
+    font-size: 0.8rem; /* Increased */
+  }
+}
+
+/* Handle very small screens */
+@media (max-width: 320px) {
+  .hero-section-home {
+    padding-top: 10px;
+  }
+  .countdown-container{
+    margin-bottom: 2rem;
+  }
+  .countdown-title{
+    margin-top: 1rem;
+  }
+  .main-title {
+    font-size: 1.6rem; /* Increased */
+  }
+  
+  .content-wrapper-home {
+    margin: 0;
+    padding-top: 0;
+  }
+  
+  .countdown-item {
+    min-width: 55px; /* Increased */
+    padding: 0.4rem; /* Increased */
+  }
+  
+  .countdown-value {
+    font-size: 0.6rem; /* Increased */
+  }
+  
+  .countdown-label {
+    font-size: 0.30rem; /* Increased */
+  }
+  
+}

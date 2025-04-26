@@ -1,0 +1,285 @@
+.music-page {
+  width: 100%;
+  background: #f8fafc;
+  min-height: 100vh;
+  margin-top:50px;
+}
+
+/* Hero Section */
+.hero-section-music {
+  position: relative;
+  height: 500px;
+  background-image: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&q=100');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
+  padding: 0 2rem;
+  text-align: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.hero-section-music h1 {
+  color: rgb(255, 225, 107);
+  font-size: 3.5rem;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  padding-bottom: 0.5rem;
+  border-bottom: 0.2px solid currentColor;
+}
+
+.hero-subtitle-music {
+  color: rgb(255, 225, 107);
+  font-size: 1.2rem;
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin-top: 30px;
+}
+
+/* Albums Container */
+.albums-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.albums-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+/* Album Card */
+.album-card {
+  background: white;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.album-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.album-flex {
+  display: flex;
+  flex-direction: row;
+}
+
+.card-image-container-music {
+  flex: 0 0 300px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-image-container-music img {
+  width: 100%;
+  height: 30rem;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.album-card:hover .card-image-container-music img {
+  transform: scale(1.05);
+}
+
+.content-wrapper-music {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-content {
+  padding: 1.5rem;
+  flex: 1;
+}
+
+.category {
+  display: inline-block;
+  color: #2563eb;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  color: #1e293b;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.year {
+  color: #64748b;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.description {
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.quote {
+  color: #1e293b;
+  font-style: italic;
+  margin-bottom: 0.5rem;
+}
+
+.quote-source {
+  color: #64748b;
+  text-align: right;
+  font-size: 0.875rem;
+}
+
+.card-player {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.spotify-playlist iframe {
+  width: 100%;
+  height: 200px;
+  border: none;
+}
+
+/* Responsive Styles */
+@media (min-width: 768px) {
+  .hero-section-music h1 {
+    font-size: 4rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .album-flex {
+    flex-direction: column;
+  }
+
+  .card-image-container-music {
+    flex: 0 0 auto;
+    height: 200px;
+  }
+
+  .hero-section-music {
+    height: 400px;
+    padding: 0 1rem;
+  }
+
+  .hero-section-music h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .albums-container {
+    padding: 0 1rem;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section-music {
+    height: 450px;
+  }
+
+  .hero-section-music h1 {
+    font-size: 2rem;
+  }
+
+  .card-content {
+    padding: 1rem;
+  }
+
+  .card-image-container-music {
+    height: 180px;
+  }
+}
+
+
+
+/* Platform Buttons Container */
+.platform-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center; /* Center the buttons horizontally */
+  margin-top: 1.5rem; /* Add spacing above the buttons */
+}
+
+/* Individual Platform Button */
+.platform-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border: 2px solid #eaeaea;
+  border-radius: 50px;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.platform-button:hover {
+  background-color: #f8f9fa;
+  border-color: #333;
+  transform: translateY(-2px);
+}
+
+/* SVG Icon Styling */
+.platform-button svg {
+  width: 24px;
+  height: 24px;
+  stroke: #333;
+  transition: stroke 0.3s ease;
+}
+
+.platform-button:hover svg {
+  stroke: #1a1a1a;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .platform-buttons {
+    flex-direction: column; /* Stack buttons vertically on smaller screens */
+    align-items: center;
+  }
+
+  .platform-button {
+    width: 100%; /* Make buttons full-width */
+    justify-content: center;
+  }
+}

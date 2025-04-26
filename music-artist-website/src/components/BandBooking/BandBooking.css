@@ -1,0 +1,256 @@
+/* BandBookingForm.css */
+.band-booking-container {
+    /* max-width: 800px; */
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Arial', sans-serif;
+    /* background-color: #d5e289; */
+    z-index: 1;
+    background: linear-gradient(to bottom, #726953, #343232);
+    width: 100%;
+    position: relative;
+  }
+  
+  .band-booking-title {
+    color: rgb(255, 225, 107);
+    font-size: 3.5rem;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    padding-bottom: 0.5rem;
+    border-bottom: 0.5px solid currentColor;
+    margin-top: 90px;
+  }
+  
+  .band-booking-subtitle {
+    text-align: center;
+    color: #f0f8e3;
+    margin-bottom: 2rem;
+    font-size: 24px;
+  }
+  
+  .band-booking-form {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .band-booking-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ecf0f1;
+  }
+  
+  .band-booking-section h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    color: #1e293b;
+    font-size: 1.5rem;
+    font-weight: 700
+  }
+  
+  .band-booking-field {
+    margin-bottom: 1.5rem;
+  }
+  
+  .band-booking-field label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #34495e;
+    font-weight: 500;
+  }
+  
+  .band-booking-field input[type="text"],
+  .band-booking-field input[type="email"],
+  .band-booking-field input[type="tel"],
+  .band-booking-field input[type="time"],
+  .band-booking-field textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  .band-booking-field input:focus,
+  .band-booking-field textarea:focus {
+    outline: none;
+    border-color: #3498db;
+  }
+  
+  .band-booking-field textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .band-booking-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .band-booking-row .band-booking-field {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .band-booking-radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .band-booking-radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .band-booking-checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .band-booking-checkbox-label input[type="checkbox"] {
+    margin-top: 0.25rem;
+  }
+  
+  .band-booking-submit {
+    background-color: #E4A11B;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  
+  .band-booking-submit:hover {
+    background-color: #2980b9;
+  }
+  
+  .band-booking-submit:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+  }
+  
+  @media (max-width: 768px) {
+    .band-booking-container {
+      padding: 1rem;
+    }
+    .band-booking-title {
+      margin-top: 110px;
+    }
+    .band-booking-form {
+      padding: 1rem;
+    }
+    
+    .band-booking-row {
+      flex-direction: column;
+    }
+    
+    .band-booking-row .band-booking-field {
+      min-width: 100%;
+    }
+    
+    .band-booking-radio-group {
+      flex-direction: column;
+    }
+  }
+
+
+/* Add these new styles to your existing CSS file */
+
+.band-booking-message {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 8px;
+  animation: slideIn 0.5s ease-out;
+  transition: all 0.3s ease;
+}
+
+.band-booking-success {
+  background-color: #ecfdf5;
+  border: 1px solid #10b981;
+  color: #065f46;
+}
+
+.band-booking-error {
+  background-color: #fef2f2;
+  border: 1px solid #ef4444;
+  color: #991b1b;
+}
+
+.band-booking-message-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.band-booking-success-icon {
+  width: 40px;
+  height: 40px;
+  stroke: #10b981;
+  margin-bottom: 1rem;
+}
+
+.band-booking-success-details {
+  margin-top: 1.5rem;
+  text-align: left;
+  width: 100%;
+  max-width: 500px;
+}
+
+.band-booking-success-details p {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.band-booking-success-details ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.band-booking-success-details li {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.band-booking-success-details li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #10b981;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Optional: Add a subtle transition when form is reset */
+.band-booking-form {
+  transition: opacity 0.3s ease;
+}
+
+.band-booking-form.submitting {
+  opacity: 0.7;
+  pointer-events: none;
+}

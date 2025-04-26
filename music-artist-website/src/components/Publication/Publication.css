@@ -1,0 +1,231 @@
+/* Publications Page Styles */
+.publications-page {
+  width: 100%;
+  padding-top: 65px; /* Height of navbar */
+  background:#f8fafc;
+  min-height: 100vh;
+}
+
+/* Hero Section */
+.hero-section-publication {
+  position: relative;
+  height: 500px;
+  background-image: url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.hero-section-publication h1 {
+  color: rgb(255, 225, 107);
+  font-size: 3.5rem;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid currentColor;
+}
+
+/* Publications Container */
+.publications-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Publications Grid */
+.publications-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+/* Publication Card */
+.publication-card {
+  background: white;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.publication-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-image-container {
+  position: relative;
+  padding-top: 60%;
+  overflow: hidden;
+}
+
+.card-image-container img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.publication-card:hover .card-image-container img {
+  transform: scale(1.05);
+}
+
+.card-content {
+  padding: 1.5rem;
+}
+
+.category {
+  display: inline-block;
+  color: #E4A11B;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  color: #1e293b;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.subtitle {
+  color: #64748b;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.card-actions {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  gap: 1rem;
+}
+
+.action-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.action-button.download {
+  background-color: #E4A11B;
+  color: white;
+}
+
+.action-button.download:hover {
+  background-color: #dac34f;
+}
+
+.action-button.read-more {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+.action-button.read-more:hover {
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem 0;
+}
+
+.page-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: #e2e8f0;
+  color: #64748b;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.page-button:hover {
+  background: #cbd5e1;
+  color: #475569;
+}
+
+.page-button.active {
+  background: #2563eb;
+  color: white;
+}
+
+.page-button.next {
+  background: #f1f5f9;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .hero-section-publication {
+    height: 300px;
+  }
+
+  .hero-section-publication h1 {
+    font-size: 2.5rem;
+  }
+
+  .publications-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .card-actions {
+    flex-direction: column;
+  }
+
+  .action-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section-publication {
+    height: 250px;
+  }
+
+  .hero-section-publication h1 {
+    font-size: 2rem;
+  }
+
+  .publications-container {
+    padding: 0 1rem;
+  }
+}

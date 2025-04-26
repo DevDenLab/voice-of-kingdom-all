@@ -1,0 +1,135 @@
+/* Base Card Styles */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  height: 100%; /* Ensure cards stretch vertically */
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 0px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Typography Styles */
+h3 {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #000000;
+  font-family: 'Lucida Sans', Geneva, Verdana, sans-serif;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 5px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+
+/* Quote Card Specific Styles */
+.quote-card {
+  background-color: #9c8614;
+  color: white;
+  font-style: italic;
+  height: 100%; /* Stretch to container height */
+}
+
+.quote-card p {
+  text-align: center;
+  font-family: 'Georgia', serif;
+  font-size: 1.8rem;
+  font-style: italic;
+  line-height: 1.6;
+  max-width: 90%;
+  margin: 0 auto; /* Center content */
+}
+
+.quote-card footer {
+  text-align: right;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Info Card Specific Styles */
+.info-card {
+  background-color: rgb(246, 237, 255);
+  color: #333;
+  height: 100%; /* Stretch to container height */
+}
+
+.info-card p {
+  text-align: center;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 1.5rem;
+  line-height: 2;
+  max-width: 90%;
+  margin: 10px auto;
+}
+
+.info-card h3 {
+  text-align: center;
+  font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  font-weight: 900;
+}
+
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .cards-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .card {
+    width: 100%; /* Full width on mobile */
+    height: 50%; /* Half viewport height per card */
+  }
+  .info-card {
+    background-color: rgb(246, 237, 255);
+    color: #333;
+  }
+}
+
+/* For screens greater than 768px (Desktop and larger screens) */
+/* For screens greater than 768px (Desktop and larger screens) */
+@media (min-width: 768px) {
+  .cards-container {
+    display: flex; /* Ensure the container is a flexbox */
+    flex-direction: row; /* Arrange the cards side by side */
+    align-items: flex-start; /* Align cards to the top */
+    justify-content: space-between; /* Space between items */
+    gap: 0; /* Remove any space between cards */
+    margin: 0; /* Remove margin from container */
+    padding: 0; /* Remove padding from container */
+  }
+
+  .card {
+    flex: 1; /* Allow cards to take up equal space */
+    margin: 0; /* Remove margin between cards */
+    height: auto; /* Let the height adjust based on content */
+    width: 100%; /* Ensure cards take up 100% of their container's width */
+  }
+
+  .quote-card {
+    height: 80vh; /* Set height for quote card */
+    width: 100%; /* Allow the quote card to take up full width */
+  }
+
+  .info-card {
+    height: 80vh; /* Set height for info card */
+    width: 100%; /* Allow the info card to take up full width */
+  }
+}
+
+

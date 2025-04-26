@@ -1,0 +1,61 @@
+/* App.css */
+.min-vh-100 {
+  min-height: 100vh;
+}
+
+.flex-grow-1 {
+  flex: 1 0 auto;
+}
+
+/* Optional: Add some spacing at the bottom of forms */
+form {
+  margin-bottom: 1rem;
+}
+
+/* Ensure footer stays at bottom */
+footer {
+  flex-shrink: 0;
+  padding-top: 2rem; /* Add top padding to give spacing */
+}
+
+/* Additional styles for footer sections */
+.footer-section {
+  margin-bottom: 1.5rem;
+}
+
+/* Adjust spacing between sections in desktop view */
+@media (min-width: 768px) {
+  .footer-row {
+    display: flex;
+    justify-content: space-between; /* Distribute columns evenly */
+    gap: 1.5rem; /* Adjust the gap between columns */
+  }
+
+  .footer-section, .custom-padding-contact {
+    margin-bottom: 0; /* Remove margin-bottom */
+  }
+
+  .no-padding {
+    padding: 0; /* Ensure no padding for specific sections */
+  }
+
+  .custom-padding-contact {
+    padding-right:-100px; /* Adjust padding-right */
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-section {
+    text-align: center;
+  }
+}
+
+/* Custom padding for footer sections */
+.custom-padding {
+  padding: 0 15px; /* Adjust padding as needed */
+}
+
+/* Custom padding for Contact section */
+.custom-padding-contact {
+  padding: 0 5px; /* Adjust padding-right as needed */
+}
