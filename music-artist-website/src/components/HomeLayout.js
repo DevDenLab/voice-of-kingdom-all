@@ -36,7 +36,7 @@ const Home = () => {
 
   return (
     <div className="pb-4">
-      <MainContent imageUrl={media.images[0] || ''} />
+      <MainContent imageUrl="/static/Band_Image.jpg" />
       <Quote />
       {/*<SpecialEvent /> */}
       <AlbumDisplay />
