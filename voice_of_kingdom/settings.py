@@ -199,12 +199,19 @@ INSTALLED_APPS += ['storages']
 CLOUDINARY_CONFIG = {
     'cloud_name': 'ddkeblfid',
     'api_key': '627273693319633',
-    'api_secret': 'o-XFPntoFBBDvN6Q1LFus8hJuXE'
+    'api_secret': 'o-XFPntoFBBDvN6Q1LFus8hJuXE',
+    'secure': True
 }
 
 cloudinary.config(
     cloud_name=CLOUDINARY_CONFIG['cloud_name'],
     api_key=CLOUDINARY_CONFIG['api_key'],
-    api_secret=CLOUDINARY_CONFIG['api_secret']
+    api_secret=CLOUDINARY_CONFIG['api_secret'],
+    secure=CLOUDINARY_CONFIG['secure']
 )
 
+# Add these settings for YouTube iframe support
+SECURE_CONTENT_TYPE_NOSNIFF = False
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
+SECURE_BROWSER_XSS_FILTER = False

@@ -1,63 +1,65 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React from "react";
 import { Cloudinary } from "@cloudinary/url-gen";
 
-// Initialize Cloudinary
+// Initialize Cloudinary with optimized settings
 const cld = new Cloudinary({
   cloud: {
     cloudName: 'ddkeblfid'
+  },
+  url: {
+    secure: true
   }
 });
 
-// Add the CloudinaryImage component
-const CloudinaryImage = ({ publicId }) => {
-  // Remove format and quality transformations since they're causing issues
-  const imageUrl = cld.image(publicId).toURL();
+// Optimized CloudinaryImage component
+const CloudinaryImage = ({ publicId, index }) => {
+  const image = cld.image(publicId);
+  const url = image.toURL();
 
   return (
     <img 
-      src={imageUrl}
-      alt={`Highlight`}
-      loading="lazy"
-      onError={(e) => console.log('Image load error:', e)} // For debugging
+      src={url}
+      alt={`Event Highlight ${index + 1}`}
+      loading="eager"
+      width="400"
+      height="300"
+      style={{ objectFit: 'cover' }}
+      onError={(e) => console.log('Image load error:', e)}
     />
   );
 };
 
 // Add the VideoPlayer component
 const VideoPlayer = ({ video }) => {
-  const [error, setError] = useState(false);
-
-  const handleError = (e) => {
-    console.error("Error loading video:", e);
-    setError(true);
+  // Ensure the video URL is properly formatted
+  const getVideoUrl = (url) => {
+    try {
+      const videoId = url.split('embed/')[1]?.split('?')[0];
+      if (!videoId) return url;
+      
+      return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1&origin=${window.location.origin}&enablejsapi=1&widgetid=1`;
+    } catch (error) {
+      console.error('Error formatting video URL:', error);
+      return url;
+    }
   };
 
-  if (error) {
-    return <div>Error loading video. Please try again later.</div>;
-  }
-
   return (
-    <video 
-      controls
-      width="300px"
-      height="200px"
-      preload="metadata"
-      playsInline
+    <iframe
+      width="560"
+      height="315"
+      src={getVideoUrl(video.url)}
+      title="YouTube video player"
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerPolicy="strict-origin-when-cross-origin"
+      allowFullScreen
       style={{ borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}
-      onError={handleError}
-    >
-      <source 
-        src={video.url} 
-        type="video/quicktime"
-      />
-      <source 
-        src={video.url.replace('.MOV', '.mp4')} 
-        type="video/mp4"
-      />
-      Your browser does not support the video format.
-    </video>
+      sandbox="allow-same-origin allow-scripts allow-popups allow-presentation"
+      loading="lazy"
+    />
   );
 };
 
@@ -120,11 +122,12 @@ const VideoHighlights = styled.div`
   gap: 15px;
   margin-bottom: 20px;
   flex-wrap: wrap;
+  justify-content: center;
 
-  video {
+  iframe {
     @media (max-width: 768px) {
       width: 100%;
-      height: auto;
+      height: 315px;
     }
   }
 `;
@@ -153,6 +156,19 @@ const GalleryButton = styled.button`
 const EventHighlights = ({ images = [], videos = [] }) => {
   const navigate = useNavigate();
 
+  // Preload all images
+  React.useEffect(() => {
+    images.forEach((publicId, index) => {
+      const image = cld.image(publicId);
+      const url = image.toURL();
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = url;
+      document.head.appendChild(link);
+    });
+  }, [images]);
+
   const handleGalleryNavigation = () => {
     navigate("/gallery");
   };
@@ -164,15 +180,16 @@ const EventHighlights = ({ images = [], videos = [] }) => {
         {images.slice(0, 6).map((image, index) => (
           <CloudinaryImage 
             key={index} 
-            publicId={image} // Pass just the ID part, e.g., 'VOKIM187_rjlgag'
+            publicId={image}
+            index={index}
           />
         ))}
       </Collage>
-      <VideoHighlights>
+      {/* <VideoHighlights>
         {videos.slice(0, 2).map((video, index) => (
           <VideoPlayer key={index} video={video} />
         ))}
-      </VideoHighlights>
+      </VideoHighlights> */}
       <GalleryButton onClick={handleGalleryNavigation}>
         View Full Gallery
       </GalleryButton>

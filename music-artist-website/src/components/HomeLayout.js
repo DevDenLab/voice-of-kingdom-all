@@ -12,22 +12,22 @@ const Home = () => {
   useEffect(() => {
     // Set specific URLs for images and videos
     const images = [
-      'VOKIM373_efkf04',
-      'VOKIM339_u6fpyi',
-      'VOKIM325_r3ojtj',
-      'VOKIM285_w7zxta',
-      'VOKIM33_ilastc',
-      'VOKIM2_uj6mbq',
+      'VOKIM376_j2rlyl',
+      'VOKIM339_px8sr8',
+      'VOKIM371_bmwzge',
+      'VOKIM372_vspjh2',
+      'VOKIM233_iey6wf',
+      'VOKIM394_r21brp',
     ];
 
     const videos = [
       {
-        url: 'home//video 1.MOV',
-        type: 'video/quicktime'
+        url: 'https://www.youtube.com/embed/3kDcaMr09Uc?autoplay=0&rel=0&modestbranding=1',
+        type: 'youtube'
       },
       {
-        url: 'home//video 2.MOV',
-        type: 'video/quicktime'
+        url: 'https://www.youtube.com/embed/3kDcaMr09Uc?autoplay=0&rel=0&modestbranding=1',
+        type: 'youtube'
       }
     ];
 

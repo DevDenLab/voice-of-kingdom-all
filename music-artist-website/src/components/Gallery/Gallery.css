@@ -2,6 +2,10 @@
     padding: 20px;
     font-family: 'Arial', sans-serif;
     background-color: #f9f9f9;
+    min-height: 100vh;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .gallery h1 {
@@ -40,133 +44,140 @@
 
 .gallery-items {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    margin: 0 auto;
 }
 
 .gallery-item {
-    position: relative;
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    aspect-ratio: 16 / 9; /* Maintain a consistent aspect ratio for video and image cards */
-}
-
-.gallery-item iframe {
-    width: 100%; /* Ensure iframe videos (like YouTube) fill the container */
-    height: 100%;
-    border: none;
-}
-
-.gallery-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.gallery-image,
-.gallery-video {
-    width: 100%; /* Ensure the video fills the container */
-    height: 100%; /* Make the video fill the height of the container */
-    display: block;
-    border-radius: 10px;
-    object-fit: cover; /* Ensure the video covers the container without distortion */
-    border: none;
-    background-color: #000; /* Add a fallback background color for videos */
-}
-
-.gallery-image {
-    object-fit: cover;
-}
-
-.gallery-video {
-    border: none;
-}
-
-.gallery-item::after {
-    content: attr(data-alt);
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.6);
-    color: #fff;
-    font-size: 14px;
-    padding: 10px;
-    text-align: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.gallery-item:hover::after {
-    opacity: 1;
-}
-
-/* Add this at the bottom of the file for mobile responsiveness */
-@media (max-width: 768px) {
-    .gallery {
-        padding: 10px; /* Reduce padding for smaller screens */
-    }
-
-    .gallery h1 {
-        font-size: 28px; /* Adjust font size for headings */
-        height: auto; /* Remove fixed height for better flexibility */
-    }
-
-    .gallery-year h2 {
-        font-size: 36px; /* Reduce font size for year headings */
-    }
-
-    .gallery-items {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjust grid layout for smaller screens */
-        gap: 15px; /* Reduce gap between items */
-    }
-
-    .gallery-item {
-        border-radius: 5px; /* Reduce border radius for smaller screens */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adjust shadow for smaller screens */
-    }
-
-    .gallery-item:hover {
-        transform: scale(1.02); /* Slightly reduce hover effect */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Adjust hover shadow */
-    }
-
-    .gallery-item::after {
-        font-size: 12px; /* Adjust font size for captions */
-        padding: 8px; /* Reduce padding for captions */
-    }
-}
-
-.gallery-items {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
-  }
-  
-  .gallery-item {
     position: relative;
     aspect-ratio: 1;
     overflow: hidden;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
-  }
-  
-  .gallery-item:hover {
-    transform: scale(1.03);
-  }
-  
-  .gallery-image {
+    background-color: #f0f0f0;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in forwards;
+}
+
+.gallery-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.gallery-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-  
-  .gallery-loading {
+    transition: transform 0.3s ease;
+}
+
+.gallery-loading-indicator {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    opacity: 0;
+    animation: fadeIn 0.3s ease-in forwards;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #E4A11B;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-error {
     text-align: center;
-    padding: 40px;
-    font-size: 1.2rem;
+    padding: 20px;
+    margin: 20px;
+    color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+    border-radius: 8px;
+    font-size: 1.1rem;
+}
+
+.gallery-end {
+    text-align: center;
+    padding: 20px;
+    margin: 20px;
     color: #666;
-  }
+    font-size: 1.1rem;
+    font-style: italic;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in forwards;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .gallery-items {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .gallery {
+        padding: 10px;
+    }
+
+    .gallery h1 {
+        font-size: 28px;
+        height: auto;
+        margin-top: 20px;
+    }
+
+    .gallery-year h2 {
+        font-size: 36px;
+    }
+
+    .gallery-items {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+        padding: 10px;
+    }
+
+    .gallery-item {
+        border-radius: 6px;
+    }
+
+    .loading-spinner {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-items {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+    }
+
+    .gallery-year h2 {
+        font-size: 28px;
+    }
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
