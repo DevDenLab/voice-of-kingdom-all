@@ -151,13 +151,14 @@
     }
 
     .gallery-items {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         gap: 15px;
         padding: 10px;
     }
 
     .gallery-item {
         border-radius: 6px;
+        aspect-ratio: 4/3;
     }
 
     .loading-spinner {
@@ -168,8 +169,12 @@
 
 @media (max-width: 480px) {
     .gallery-items {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 10px;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .gallery-item {
+        aspect-ratio: 3/2;
     }
 
     .gallery-year h2 {
