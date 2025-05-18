@@ -125,13 +125,16 @@ const Gallery = () => {
                   responsiveUseBreakpoints
                   transformation={[
                     {
-                      width: 800,
+                      width: 1600,
+                      height: 1200,
                       crop: 'scale',
                       quality: 'auto:good',
                       fetch_format: 'auto',
                       dpr: 'auto'
                     }
                   ]}
+                  breakpoints={[375, 768, 1024, 1366]}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               </div>
             ))}
