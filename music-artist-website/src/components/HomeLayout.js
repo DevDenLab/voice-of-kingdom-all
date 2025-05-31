@@ -16,7 +16,7 @@ const Home = () => {
       'VOKIM339_px8sr8',
       'VOKIM371_bmwzge',
       'VOKIM372_vspjh2',
-      'VOKIM233_iey6wf',
+      'VOKIM285_q5baqn',
       'VOKIM394_r21brp',
     ];
 

@@ -100,7 +100,7 @@ const AboutUs = () => {
                   Kindly contact us today to find out more and get the VOKIM Experience. Also follow us on Social Media to stay updated on our latest music, performances, and events.
                 </p>
 
-                <div className="social-links">
+                {/* <div className="social-links">
                   {socialLinks.map((link, index) => (
                     <a
                       key={index}
@@ -114,7 +114,7 @@ const AboutUs = () => {
                       <link.icon size={32} />
                     </a>
                   ))}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
