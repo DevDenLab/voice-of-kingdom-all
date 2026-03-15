@@ -6,6 +6,7 @@ import AlbumDisplay2 from './Home/AlbumInfo2';
 import AlbumDisplay3 from './Home/AlbumInfo3';
 import SpecialEvent from './Home/SpecialEvent';
 import EventHighlights from "./Home/EventHighlights";
+import VokimExperience from './Home/VokimExperience';
 
 const Home = () => {
   const [media, setMedia] = useState({ images: [], videos: [] });
@@ -39,9 +40,10 @@ const Home = () => {
       <MainContent imageUrl="/static/Band_Image.jpg" />
       <Quote />
       {/*<SpecialEvent /> */}
-      <AlbumDisplay />
-      <AlbumDisplay2 />
-      <AlbumDisplay3 />
+      <VokimExperience />
+      {/*<AlbumDisplay />*/}
+      {/*<AlbumDisplay2 />*/}
+      {/*<AlbumDisplay3 />*/}
       <EventHighlights images={media.images} videos={media.videos} />
     </div>
   );

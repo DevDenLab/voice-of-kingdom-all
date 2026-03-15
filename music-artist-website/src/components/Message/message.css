@@ -241,9 +241,22 @@
   }
 }
 
+@media (max-width: 900px) {
+  .hero-section-message {
+    height: auto;
+    min-height: 280px;
+    padding: 3rem 1.5rem;
+  }
+
+  .hero-section-message h1 {
+    font-size: 3rem;
+  }
+}
+
 @media (max-width: 480px) {
   .hero-section-message {
-    height: 250px;
+    min-height: 220px;
+    padding: 2rem 1rem;
   }
 
   .hero-section-message h1 {
@@ -252,5 +265,24 @@
 
   .messages-container {
     padding: 0 1rem;
+  }
+
+  .subscribe-input,
+  .subscribe-button {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .hero-section-message h1 {
+    font-size: 1.75rem;
+  }
+
+  .messages-container {
+    padding: 0 0.75rem;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
   }
 }

@@ -412,32 +412,36 @@
   .hero-section-home {
     padding-top: 10px;
   }
-  .countdown-container{
+  .countdown-container {
     margin-bottom: 2rem;
   }
-  .countdown-title{
+  .countdown-title {
     margin-top: 1rem;
+    font-size: 1rem;
   }
   .main-title {
-    font-size: 1.6rem; /* Increased */
+    font-size: 1.4rem;
   }
-  
+
   .content-wrapper-home {
     margin: 0;
     padding-top: 0;
   }
-  
+
+  .countdown-timer {
+    gap: 0.4rem;
+  }
+
   .countdown-item {
-    min-width: 55px; /* Increased */
-    padding: 0.4rem; /* Increased */
+    min-width: 48px;
+    padding: 0.35rem;
   }
-  
+
   .countdown-value {
-    font-size: 0.6rem; /* Increased */
+    font-size: 1.4rem;
   }
-  
+
   .countdown-label {
-    font-size: 0.30rem; /* Increased */
+    font-size: 0.6rem;
   }
-  
 }

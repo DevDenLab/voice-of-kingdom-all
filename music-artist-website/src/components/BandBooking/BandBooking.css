@@ -143,27 +143,65 @@
     cursor: not-allowed;
   }
   
+  @media (max-width: 900px) {
+    .band-booking-title {
+      font-size: 3rem;
+    }
+  }
+
   @media (max-width: 768px) {
     .band-booking-container {
       padding: 1rem;
     }
     .band-booking-title {
+      font-size: 2.5rem;
       margin-top: 110px;
+    }
+    .band-booking-subtitle {
+      font-size: 1.1rem;
     }
     .band-booking-form {
       padding: 1rem;
     }
-    
+
     .band-booking-row {
       flex-direction: column;
     }
-    
+
     .band-booking-row .band-booking-field {
       min-width: 100%;
     }
-    
+
     .band-booking-radio-group {
       flex-direction: column;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .band-booking-container {
+      padding: 0.75rem;
+    }
+    .band-booking-title {
+      font-size: 2rem;
+      margin-top: 90px;
+    }
+    .band-booking-subtitle {
+      font-size: 1rem;
+    }
+    .band-booking-form {
+      padding: 0.75rem;
+    }
+    .band-booking-section h2 {
+      font-size: 1.25rem;
+    }
+  }
+
+  @media (max-width: 320px) {
+    .band-booking-title {
+      font-size: 1.75rem;
+    }
+    .band-booking-container {
+      padding: 0.5rem;
     }
   }
 

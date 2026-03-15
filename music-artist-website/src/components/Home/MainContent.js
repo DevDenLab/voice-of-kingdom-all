@@ -13,7 +13,7 @@ const MainContent = ({ imageUrl }) => {
   useEffect(() => {
     // Set the target date to March 15th of the current year
     const calculateTimeLeft = () => {
-      const targetDate = new Date('2025-03-15T00:00:00');
+      const targetDate = new Date('2026-06-27T00:00:00');
       const now = new Date();
       const difference = targetDate - now;
 
@@ -69,7 +69,7 @@ const MainContent = ({ imageUrl }) => {
       <div className="hero-section-home" style={{ '--bg-image': `url(${imageUrl})` }}>
         <div className="hero-overlay-home"></div>
         <div className="hero-content">
-          {/* <div className="countdown-container">
+          <div className="countdown-container">
             <div className="countdown-title">EVENT STARTS IN</div>
             <div className="countdown-timer">
               <div className="countdown-item">
@@ -89,7 +89,7 @@ const MainContent = ({ imageUrl }) => {
                 <div className="countdown-label">Sec</div>
               </div>
             </div>
-          </div> */}
+          </div>
           <div className="content-wrapper-home">
             <h1 className="main-title">RAISING VOICES</h1>
             <h1 className="main-title">EXPANDING HIS KINGDOM: EXALTING JESUS</h1>

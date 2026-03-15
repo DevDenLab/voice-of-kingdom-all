@@ -148,8 +148,47 @@
   to { transform: rotate(360deg); }
 }
 
+@media (max-width: 900px) {
+  .contact-title {
+    font-size: 3rem;
+  }
+}
+
 @media (max-width: 768px) {
   .contact-container {
     padding-top: 120px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .contact-title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-container {
+    padding-top: 100px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .contact-title {
+    font-size: 2rem;
+  }
+
+  .contact-card {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 320px) {
+  .contact-title {
+    font-size: 1.75rem;
+  }
+
+  .contact-container {
+    padding-left: 8px;
+    padding-right: 8px;
   }
 }

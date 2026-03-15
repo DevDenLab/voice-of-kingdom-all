@@ -92,3 +92,73 @@
   .thank-you-paragraph {
     text-align: center;
   }
+
+/* Responsive Styles */
+@media (max-width: 900px) {
+  .donation-wrapper {
+    margin-top: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .donation-container {
+    padding: 15px;
+    margin-top: -30px;
+  }
+
+  .donation-wrapper {
+    margin-top: 100px;
+  }
+
+  .donation-title {
+    font-size: 2rem;
+  }
+
+  .donation-card {
+    padding: 16px;
+  }
+
+  .card-subtitle {
+    font-size: 1.25rem;
+  }
+
+  .donation-card-container {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .donation-wrapper {
+    margin-top: 80px;
+  }
+
+  .donation-title {
+    font-size: 1.75rem;
+  }
+
+  .card-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .donation-card {
+    padding: 14px;
+  }
+
+  .mail-section {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 320px) {
+  .donation-wrapper {
+    margin-top: 70px;
+  }
+
+  .donation-title {
+    font-size: 1.5rem;
+  }
+
+  .donation-container {
+    padding: 10px;
+  }
+}

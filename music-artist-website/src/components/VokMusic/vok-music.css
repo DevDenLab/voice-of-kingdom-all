@@ -85,7 +85,7 @@
 }
 
 .card-image-container-music {
-  flex: 0 0 300px;
+  flex: 0 0 clamp(200px, 25vw, 300px);
   position: relative;
   overflow: hidden;
 }
@@ -272,14 +272,60 @@
 }
 
 /* Responsive Styling */
+@media (max-width: 900px) {
+  .hero-section-music {
+    height: auto;
+    min-height: 350px;
+    padding: 3rem 1.5rem;
+  }
+
+  .hero-section-music h1 {
+    font-size: 3rem;
+  }
+}
+
 @media (max-width: 768px) {
   .platform-buttons {
-    flex-direction: column; /* Stack buttons vertically on smaller screens */
+    flex-direction: column;
     align-items: center;
   }
 
   .platform-button {
-    width: 100%; /* Make buttons full-width */
+    width: 100%;
     justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section-music {
+    min-height: 280px;
+    padding: 2rem 1rem;
+  }
+
+  .hero-section-music h1 {
+    font-size: 1.75rem;
+  }
+
+  .hero-subtitle-music {
+    font-size: 0.95rem;
+    margin-top: 16px;
+  }
+
+  .card-content {
+    padding: 0.875rem;
+  }
+
+  .title {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .hero-section-music h1 {
+    font-size: 1.5rem;
+  }
+
+  .albums-container {
+    padding: 0 0.75rem;
   }
 }

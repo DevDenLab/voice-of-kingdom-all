@@ -216,9 +216,22 @@
   }
 }
 
+@media (max-width: 900px) {
+  .hero-section-publication {
+    height: auto;
+    min-height: 280px;
+    padding: 3rem 1.5rem;
+  }
+
+  .hero-section-publication h1 {
+    font-size: 3rem;
+  }
+}
+
 @media (max-width: 480px) {
   .hero-section-publication {
-    height: 250px;
+    min-height: 220px;
+    padding: 2rem 1rem;
   }
 
   .hero-section-publication h1 {
@@ -227,5 +240,20 @@
 
   .publications-container {
     padding: 0 1rem;
+  }
+
+  .publications-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .hero-section-publication h1 {
+    font-size: 1.75rem;
+  }
+
+  .publications-container {
+    padding: 0 0.75rem;
   }
 }

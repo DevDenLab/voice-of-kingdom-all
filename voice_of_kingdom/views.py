@@ -31,12 +31,14 @@ def get_gallery_images(request):
         logger.info(f"Fetching gallery images with cursor: {next_cursor}")
         
         # Basic Cloudinary API call with minimal parameters
-        result = cloudinary.api.resources(
-            type="upload",
-            max_results=batch_size,
-            next_cursor=next_cursor,
-            resource_type="image"
-        )
+        params = {
+            'type': 'upload',
+            'max_results': batch_size,
+            'resource_type': 'image',
+        }
+        if next_cursor:
+            params['next_cursor'] = next_cursor
+        result = cloudinary.api.resources(**params)
         
         # Log the number of resources found
         resources = result.get('resources', [])

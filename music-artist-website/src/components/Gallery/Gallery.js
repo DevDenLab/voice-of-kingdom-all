@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import './Gallery.css';
-import { CloudinaryContext, Image } from 'cloudinary-react';
+
+const CLOUD_NAME = 'ddkeblfid';
+
+const cloudinaryUrl = (publicId) =>
+  `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/c_fill,w_800,h_800,q_auto:good,f_auto/${publicId}`;
 
 // Create a preload function that can be used globally
 export const preloadGalleryImages = async () => {
@@ -28,6 +32,8 @@ export const preloadGalleryImages = async () => {
   }
 };
 
+const MAX_RETRIES = 3;
+
 const Gallery = () => {
   const [images, setImages] = useState([]);
   const [nextCursor, setNextCursor] = useState(null);
@@ -35,24 +41,24 @@ const Gallery = () => {
   const [error, setError] = useState(null);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
+  const [retryCount, setRetryCount] = useState(0);
   const imagesPerPage = 24;
 
-  // Function to load images with retry logic
   const loadImages = useCallback(async (cursor = null) => {
     if (loading || (!hasMore && cursor)) return;
-    
+
     try {
       setLoading(true);
       setError(null);
-      
-      const response = await fetch(`/api/gallery-images/?${cursor ? `next_cursor=${cursor}` : ''}`);
-      
+
+      const response = await fetch(`/api/gallery-images/${cursor ? `?next_cursor=${cursor}` : ''}`);
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const data = await response.json();
-      
+
       if (data.images && data.images.length > 0) {
         setImages(prevImages => {
           const existingIds = new Set(prevImages.map(img => img.publicId));
@@ -62,17 +68,21 @@ const Gallery = () => {
         setNextCursor(data.next_cursor);
         setHasMore(data.has_more);
         setPage(prev => prev + 1);
+        setRetryCount(0);
       } else {
         setHasMore(false);
       }
-    } catch (error) {
-      console.error('Error loading images:', error);
-      setError('Failed to load images. Please try again.');
-      setTimeout(() => {
-        if (hasMore) {
-          loadImages(cursor);
+    } catch (err) {
+      console.error('Error loading images:', err);
+      setRetryCount(prev => {
+        const next = prev + 1;
+        if (next < MAX_RETRIES) {
+          setTimeout(() => loadImages(cursor), 3000);
+        } else {
+          setError('Unable to load gallery images. Please refresh the page.');
         }
-      }, 3000);
+        return next;
+      });
     } finally {
       setLoading(false);
     }
@@ -104,53 +114,32 @@ const Gallery = () => {
   const currentImages = images.slice(0, page * imagesPerPage);
 
   return (
-    <CloudinaryContext cloudName="ddkeblfid">
-      <div className="gallery">
-        <div className="gallery-year">
-          <h2 className="centered-heading">Vokim 2025</h2>
-          <div className="gallery-items">
-            {currentImages.map((image, index) => (
-              <div key={image.publicId} className="gallery-item">
-                <Image
-                  publicId={image.publicId}
-                  alt={image.alt}
-                  className="gallery-image"
-                  loading="eager"
-                  width="auto"
-                  crop="scale"
-                  quality="auto:good"
-                  fetchFormat="auto"
-                  dpr="auto"
-                  responsive
-                  responsiveUseBreakpoints
-                  transformation={[
-                    {
-                      width: 1200,
-                      height: 900,
-                      crop: 'scale',
-                      quality: 'auto:good',
-                      fetch_format: 'auto',
-                      dpr: 'auto'
-                    }
-                  ]}
-                  breakpoints={[375, 768, 1024, 1366]}
-                  sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw"
-                />
-              </div>
-            ))}
-          </div>
-          {error && <div className="gallery-error">{error}</div>}
-          {loading && hasMore && (
-            <div className="gallery-loading-indicator">
-              <div className="loading-spinner"></div>
+    <div className="gallery">
+      <div className="gallery-year">
+        <h2 className="centered-heading">Vokim 2025</h2>
+        <div className="gallery-items">
+          {currentImages.map((image) => (
+            <div key={image.publicId} className="gallery-item">
+              <img
+                src={cloudinaryUrl(image.publicId)}
+                alt={image.alt || image.publicId}
+                className="gallery-image"
+                loading="lazy"
+              />
             </div>
-          )}
-          {!hasMore && images.length > 0 && (
-            <div className="gallery-end">All images loaded</div>
-          )}
+          ))}
         </div>
+        {error && <div className="gallery-error">{error}</div>}
+        {loading && hasMore && (
+          <div className="gallery-loading-indicator">
+            <div className="loading-spinner"></div>
+          </div>
+        )}
+        {!hasMore && images.length > 0 && (
+          <div className="gallery-end">All images loaded</div>
+        )}
       </div>
-    </CloudinaryContext>
+    </div>
   );
 };
 
