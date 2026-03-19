@@ -70,7 +70,7 @@ const MainContent = ({ imageUrl }) => {
         <div className="hero-overlay-home"></div>
         <div className="hero-content">
           <div className="countdown-container">
-            <div className="countdown-title">EVENT STARTS IN</div>
+            <div className="countdown-title">VOKIM EXPERIENCE 2026 STARTS IN</div>
             <div className="countdown-timer">
               <div className="countdown-item">
                 <div className="countdown-value">{timeLeft.days}</div>
