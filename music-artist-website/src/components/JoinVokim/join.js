@@ -797,98 +797,88 @@ const GospelBandForm = () => {
                   <input
                     type="radio"
                     name="role"
-                    value="Event Organizer"
-                    checked={formData.role === 'Event Organizer'}
+                    value="Administration"
+                    checked={formData.role === 'Administration'}
                     onChange={handleChange}
                     required
                   />
-                  Event Organizer
+                  Administration
                 </label>
                 <label className="checkbox-label">
                   <input
                     type="radio"
                     name="role"
-                    value="Photographer/Videographer"
-                    checked={formData.role === 'Photographer/Videographer'}
+                    value="Media & Communications"
+                    checked={formData.role === 'Media & Communications'}
                     onChange={handleChange}
                   />
-                  Photographer/Videographer
+                  Media & Communications
                 </label>
                 <label className="checkbox-label">
                   <input
                     type="radio"
                     name="role"
-                    value="Social Media Manager"
-                    checked={formData.role === 'Social Media Manager'}
+                    value="Technical & Production"
+                    checked={formData.role === 'Technical & Production'}
                     onChange={handleChange}
                   />
-                  Social Media Manager
+                  Technical & Production
                 </label>
                 <label className="checkbox-label">
                   <input
                     type="radio"
                     name="role"
-                    value="Graphic Designer"
-                    checked={formData.role === 'Graphic Designer'}
+                    value="Hospitality & Logistics"
+                    checked={formData.role === 'Hospitality & Logistics'}
                     onChange={handleChange}
                   />
-                  Graphic Designer
+                  Hospitality & Logistics
                 </label>
                 <label className="checkbox-label">
                   <input
                     type="radio"
                     name="role"
-                    value="Sound Engineer"
-                    checked={formData.role === 'Sound Engineer'}
+                    value="Ministry & Spiritual Support"
+                    checked={formData.role === 'Ministry & Spiritual Support'}
                     onChange={handleChange}
                   />
-                  Sound Engineer
+                  Ministry & Spiritual Support
                 </label>
                 <label className="checkbox-label">
                   <input
                     type="radio"
                     name="role"
-                    value="Stage Manager"
-                    checked={formData.role === 'Stage Manager'}
+                    value="Event Day Support"
+                    checked={formData.role === 'Event Day Support'}
                     onChange={handleChange}
                   />
-                  Stage Manager
+                  Event Day Support
                 </label>
                 <label className="checkbox-label">
                   <input
                     type="radio"
                     name="role"
-                    value="PR & Communications"
-                    checked={formData.role === 'PR & Communications'}
+                    value="Dancers"
+                    checked={formData.role === 'Dancers'}
                     onChange={handleChange}
                   />
-                  PR & Communications
+                  Dancers
                 </label>
                 <label className="checkbox-label">
                   <input
                     type="radio"
                     name="role"
-                    value="Logistics Coordinator"
-                    checked={formData.role === 'Logistics Coordinator'}
+                    value="Others"
+                    checked={formData.role === 'Others'}
                     onChange={handleChange}
                   />
-                  Logistics Coordinator
-                </label>
-                <label className="checkbox-label">
-                  <input
-                    type="radio"
-                    name="role"
-                    value="Other"
-                    checked={formData.role === 'Other'}
-                    onChange={handleChange}
-                  />
-                  Other
+                  Others
                 </label>
               </div>
             </div>
-            {formData.role === 'Other' && (
+            {formData.role === 'Others' && (
               <div className="form-group">
-                <label>Specify role</label>
+                <label>Please specify your role</label>
                 <input
                   type="text"
                   name="role_other"
@@ -896,6 +886,7 @@ const GospelBandForm = () => {
                   value={formData.role_other}
                   onChange={handleChange}
                   required
+                  placeholder="Describe your role"
                 />
               </div>
             )}
