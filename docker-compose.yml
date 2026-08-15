@@ -1,0 +1,144 @@
+# =============================================================================
+# Local development stack.
+#
+#   cp infra/.env.example .env      # then relax the CHANGE_ME values
+#   docker compose up --build
+#
+#   frontend      http://localhost:3000
+#   backend/api   http://localhost:8000
+#   minio console http://localhost:9001
+#
+# Production uses infra/docker-compose.prod.yml, which pulls prebuilt
+# images from ghcr.io instead of building.
+# =============================================================================
+
+name: vokim-dev
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      target: build
+    command: npm start
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+      WDS_SOCKET_PORT: "3000"
+      REACT_APP_IMG_BASE: http://localhost:8080
+      REACT_APP_MEDIA_BASE: http://localhost:9000/vokim-media
+      REACT_APP_MEDIA_BUCKET: vokim-media
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    depends_on: [backend]
+
+  backend:
+    build:
+      context: ./backend
+    command:
+      - python
+      - manage.py
+      - runserver
+      - 0.0.0.0:8000
+    environment:
+      DJANGO_DEBUG: "True"
+      DJANGO_SECRET_KEY: dev-only-not-a-real-secret
+      DJANGO_ALLOWED_HOSTS: "*"
+      DJANGO_CORS_ALLOW_ALL: "True"
+      DJANGO_SECURE_SSL_REDIRECT: "False"
+      RUN_COLLECTSTATIC: "0"
+      POSTGRES_DB: vokim
+      POSTGRES_USER: vokim
+      POSTGRES_PASSWORD: vokim
+      POSTGRES_HOST: postgres
+      REDIS_URL: redis://redis:6379/1
+      USE_S3_MEDIA: "True"
+      S3_BUCKET: vokim-media
+      S3_ENDPOINT_URL: http://minio:9000
+      S3_ACCESS_KEY: vokim-admin
+      S3_SECRET_KEY: vokim-admin-dev-password
+      MEDIA_URL: http://localhost:9000/vokim-media/
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      minio: {condition: service_healthy}
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: vokim
+      POSTGRES_USER: vokim
+      POSTGRES_PASSWORD: vokim
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vokim -d vokim"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: vokim-admin
+      MINIO_ROOT_PASSWORD: vokim-admin-dev-password
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio: {condition: service_healthy}
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 vokim-admin vokim-admin-dev-password &&
+      mc mb --ignore-existing local/vokim-media &&
+      mc anonymous set download local/vokim-media
+      "
+    restart: "no"
+
+  imgproxy:
+    image: darthsim/imgproxy:v3
+    environment:
+      IMGPROXY_BIND: ":8080"
+      IMGPROXY_ALLOW_ORIGIN: "*"
+      IMGPROXY_ALLOWED_SOURCES: "s3://vokim-media/"
+      IMGPROXY_USE_S3: "true"
+      IMGPROXY_S3_ENDPOINT: "http://minio:9000"
+      IMGPROXY_S3_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: vokim-admin
+      AWS_SECRET_ACCESS_KEY: vokim-admin-dev-password
+    ports:
+      - "8080:8080"
+    depends_on:
+      minio: {condition: service_healthy}
+
+volumes:
+  pg_data:
+  minio_data:

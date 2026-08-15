@@ -1,0 +1,63 @@
+{
+	email {$ACME_EMAIL}
+	# Uncomment while testing to avoid Let's Encrypt rate limits:
+	# acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+}
+
+# Redirect apex -> www is NOT done here; both are served so old links keep working.
+{$DOMAIN}, www.{$DOMAIN} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options    "nosniff"
+		Referrer-Policy           "no-referrer-when-downgrade"
+		-Server
+	}
+
+	# ---- Django ----
+	handle /api/* {
+		reverse_proxy backend:8000
+	}
+	handle /admin/* {
+		reverse_proxy backend:8000
+	}
+	handle /csrf/* {
+		reverse_proxy backend:8000
+	}
+	handle /django-static/* {
+		reverse_proxy backend:8000
+	}
+	handle /healthz* {
+		reverse_proxy backend:8000
+	}
+
+	# ---- imgproxy: resized images (Cloudinary replacement) ----
+	handle_path /img/* {
+		reverse_proxy imgproxy:8080
+		header Cache-Control "public, max-age=31536000, immutable"
+	}
+
+	# ---- MinIO: raw media objects (PDFs, originals) ----
+	# /media/foo.pdf -> minio:9000/<bucket>/foo.pdf  (path-style addressing)
+	handle_path /media/* {
+		rewrite * /{$S3_BUCKET}{uri}
+		reverse_proxy minio:9000
+		header Cache-Control "public, max-age=31536000"
+	}
+
+	# ---- MinIO admin console (lock this down or drop it once set up) ----
+	handle /minio/* {
+		reverse_proxy minio:9001
+	}
+
+	# ---- React SPA (everything else) ----
+	handle {
+		reverse_proxy frontend:80
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}

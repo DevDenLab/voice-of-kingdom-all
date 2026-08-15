@@ -1,0 +1,178 @@
+name: Deploy to Oracle VM
+
+# Fires when prod moves. Builds both images, pushes them to GitHub Container
+# Registry, then SSHes into the Oracle VM and rolls the stack forward.
+#
+# Required repository secrets (Settings -> Secrets and variables -> Actions):
+#   OCI_HOST            public IP of the Oracle VM
+#   OCI_USER            ssh user (ubuntu / opc)
+#   OCI_SSH_KEY         private key, full PEM including BEGIN/END lines
+#   OCI_SSH_PORT        optional, defaults to 22
+#   OCI_APP_DIR         optional, defaults to /opt/vokim
+# GITHUB_TOKEN is provided automatically and is what pushes to ghcr.io.
+
+on:
+  push:
+    branches: [prod]
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: "Skip the CI gate (emergency deploy)"
+        type: boolean
+        default: false
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAMESPACE: ghcr.io/${{ github.repository }}
+
+jobs:
+  # ---------------------------------------------------------------- 1. build
+  build:
+    name: Build & push images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    outputs:
+      image_tag: ${{ steps.meta.outputs.tag }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: meta
+        name: Compute image tag
+        run: |
+          echo "tag=${GITHUB_SHA::12}" >> "$GITHUB_OUTPUT"
+          echo "Building tag ${GITHUB_SHA::12}"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & push backend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAMESPACE }}/backend:${{ steps.meta.outputs.tag }}
+            ${{ env.IMAGE_NAMESPACE }}/backend:latest
+          cache-from: type=gha,scope=backend
+          cache-to: type=gha,mode=max,scope=backend
+
+      - name: Build & push frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          push: true
+          build-args: |
+            REACT_APP_API_URL=
+            REACT_APP_IMG_BASE=/img
+            REACT_APP_MEDIA_BASE=/media
+          tags: |
+            ${{ env.IMAGE_NAMESPACE }}/frontend:${{ steps.meta.outputs.tag }}
+            ${{ env.IMAGE_NAMESPACE }}/frontend:latest
+          cache-from: type=gha,scope=frontend
+          cache-to: type=gha,mode=max,scope=frontend
+
+  # ---------------------------------------------------------------- 2. deploy
+  deploy:
+    name: Roll out on Oracle VM
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: production
+      url: https://vokim.ca
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy infra files to the VM
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.OCI_HOST }}
+          username: ${{ secrets.OCI_USER }}
+          key: ${{ secrets.OCI_SSH_KEY }}
+          port: ${{ secrets.OCI_SSH_PORT || 22 }}
+          source: "infra/docker-compose.prod.yml,infra/caddy/Caddyfile"
+          target: ${{ secrets.OCI_APP_DIR || '/opt/vokim' }}
+          strip_components: 1
+          overwrite: true
+
+      - name: Pull new images and restart
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
+        with:
+          host: ${{ secrets.OCI_HOST }}
+          username: ${{ secrets.OCI_USER }}
+          key: ${{ secrets.OCI_SSH_KEY }}
+          port: ${{ secrets.OCI_SSH_PORT || 22 }}
+          envs: IMAGE_TAG
+          command_timeout: 15m
+          script: |
+            set -euo pipefail
+            APP_DIR="${{ secrets.OCI_APP_DIR || '/opt/vokim' }}"
+            cd "$APP_DIR"
+
+            # .env lives only on the VM and is never in git.
+            if [ ! -f .env ]; then
+              echo "::error::$APP_DIR/.env is missing. Create it from infra/.env.example first."
+              exit 1
+            fi
+
+            # Pin this rollout to the freshly built tag.
+            grep -q '^IMAGE_TAG=' .env \
+              && sed -i "s|^IMAGE_TAG=.*|IMAGE_TAG=${IMAGE_TAG}|" .env \
+              || echo "IMAGE_TAG=${IMAGE_TAG}" >> .env
+
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+            # Back up the database before migrations run.
+            mkdir -p backups
+            if docker compose -f docker-compose.prod.yml ps -q postgres >/dev/null 2>&1; then
+              set +e
+              docker compose --env-file .env -f docker-compose.prod.yml exec -T postgres \
+                pg_dump -U "$(grep '^POSTGRES_USER=' .env | cut -d= -f2)" \
+                        -d "$(grep '^POSTGRES_DB=' .env | cut -d= -f2)" \
+                > "backups/pre-deploy-$(date +%Y%m%d-%H%M%S).sql"
+              set -e
+              ls -t backups/*.sql 2>/dev/null | tail -n +11 | xargs -r rm --
+            fi
+
+            docker compose --env-file .env -f docker-compose.prod.yml pull
+            docker compose --env-file .env -f docker-compose.prod.yml up -d --remove-orphans
+            docker image prune -f --filter "until=168h"
+
+            echo "waiting for backend to become healthy..."
+            for i in $(seq 1 30); do
+              if curl -fsS http://localhost/healthz/ >/dev/null 2>&1; then
+                echo "backend healthy after ${i} attempts"
+                exit 0
+              fi
+              sleep 5
+            done
+            echo "::error::backend did not become healthy"
+            docker compose -f docker-compose.prod.yml logs --tail=100 backend
+            exit 1
+
+      - name: Public smoke test
+        run: |
+          for i in $(seq 1 10); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" https://vokim.ca/ || true)
+            echo "attempt $i -> HTTP $code"
+            [ "$code" = "200" ] && exit 0
+            sleep 10
+          done
+          echo "::error::https://vokim.ca did not return 200"
+          exit 1
