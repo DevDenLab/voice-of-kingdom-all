@@ -33,7 +33,6 @@ concurrency:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAMESPACE: ghcr.io/${{ github.repository }}
 
 jobs:
   # ---------------------------------------------------------------- 1. build
@@ -51,10 +50,15 @@ jobs:
       - uses: actions/checkout@v4
 
       - id: meta
-        name: Compute image tag
+        name: Compute image tag and namespace
         run: |
           echo "tag=${GITHUB_SHA::12}" >> "$GITHUB_OUTPUT"
-          echo "Building tag ${GITHUB_SHA::12}"
+          # ghcr.io repository names must be lowercase; github.repository
+          # preserves the repo's actual case (DevDenLab/...), which docker
+          # buildx rejects outright ("repository name must be lowercase").
+          repo_lower=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')
+          echo "namespace=ghcr.io/${repo_lower}" >> "$GITHUB_OUTPUT"
+          echo "Building tag ${GITHUB_SHA::12} for ${repo_lower}"
 
       - uses: docker/setup-qemu-action@v3
         with:
@@ -76,8 +80,8 @@ jobs:
           push: true
           platforms: linux/arm64
           tags: |
-            ${{ env.IMAGE_NAMESPACE }}/backend:${{ steps.meta.outputs.tag }}
-            ${{ env.IMAGE_NAMESPACE }}/backend:latest
+            ${{ steps.meta.outputs.namespace }}/backend:${{ steps.meta.outputs.tag }}
+            ${{ steps.meta.outputs.namespace }}/backend:latest
           cache-from: type=gha,scope=backend
           cache-to: type=gha,mode=max,scope=backend
 
@@ -92,8 +96,8 @@ jobs:
             REACT_APP_IMG_BASE=/img
             REACT_APP_MEDIA_BASE=/media
           tags: |
-            ${{ env.IMAGE_NAMESPACE }}/frontend:${{ steps.meta.outputs.tag }}
-            ${{ env.IMAGE_NAMESPACE }}/frontend:latest
+            ${{ steps.meta.outputs.namespace }}/frontend:${{ steps.meta.outputs.tag }}
+            ${{ steps.meta.outputs.namespace }}/frontend:latest
           cache-from: type=gha,scope=frontend
           cache-to: type=gha,mode=max,scope=frontend
 
