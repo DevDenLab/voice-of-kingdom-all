@@ -15,8 +15,15 @@ ENV REACT_APP_API_URL=$REACT_APP_API_URL \
     GENERATE_SOURCEMAP=false \
     CI=false
 
+# `npm ci` demands the lockfile match the exact platform's optional
+# dependencies. This image is built for linux/arm64 (the Oracle VM is
+# Ampere A1) but the runner is x86_64, so the build runs under QEMU
+# emulation -- and package-lock.json was generated on x86_64. `npm ci`
+# under emulated arm64 rejects that as a mismatch even though the lockfile
+# is otherwise correct. `npm install` reconciles instead of hard-failing,
+# while still using the committed lockfile as its resolution baseline.
 COPY package.json package-lock.json ./
-RUN npm ci --no-audit --no-fund
+RUN npm install --no-audit --no-fund
 
 COPY . .
 RUN npm run build
