@@ -50,7 +50,7 @@ export default function Footer() {
           <MDBCol md="12" className='mx-auto mb-4'>
             <div className='d-flex align-items-center justify-content-center'>
               <img 
-                src="static/footer.jpg" 
+                src="/static/footer.jpg"
                 alt="Logo" 
                 className="me-2" 
                 style={{ height: '90px' }} 

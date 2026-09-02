@@ -10,6 +10,7 @@ import DonateLayout from './components/DonateLayout';
 import BandBookingLayout from './components/BandBookingLayout';
 import MessageLayout from './components/MessageLayout';
 import GalleryLayout from './components/GalleryLayout';
+import GalleryAdminLayout from './components/GalleryAdminLayout';
 
 const AppRoutes = () => {
   return (
@@ -22,6 +23,7 @@ const AppRoutes = () => {
         <Route path="/music" element={<MusicLayout />} />
         <Route path="/join" element={<JoinLayout />} />
         <Route path="/gallery" element={<GalleryLayout />} />
+        <Route path="/gallery/manage" element={<GalleryAdminLayout />} />
         <Route path="/donate" element={<DonateLayout />} />
         <Route path="/band-book" element={<BandBookingLayout />} />
         <Route path="/message" element={<MessageLayout />} />

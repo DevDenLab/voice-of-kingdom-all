@@ -1,0 +1,290 @@
+.ga-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 110px 20px 60px;
+  font-family: 'Arial', sans-serif;
+  color: #222;
+}
+
+.ga-wrap h1 {
+  font-size: 32px;
+  margin: 0 0 6px;
+}
+
+.ga-muted {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.ga-error {
+  color: #dc3545;
+  font-size: 0.95rem;
+  margin: 6px 0;
+}
+
+.ga-ok {
+  color: #1a7f37;
+  font-size: 0.95rem;
+  margin: 6px 0;
+}
+
+/* ---- login ---- */
+.ga-login {
+  max-width: 360px;
+  margin: 40px auto;
+  padding: 28px;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.ga-login form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.ga-login label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.ga-login input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.ga-login button {
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  background: #e4a11b;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.ga-login button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* ---- header ---- */
+.ga-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 14px;
+  margin-bottom: 24px;
+}
+
+.ga-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ga-link {
+  background: none;
+  border: none;
+  color: #e4a11b;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.ga-link:hover {
+  text-decoration: underline;
+}
+
+a.ga-link {
+  display: inline-block;
+  margin-top: 4px;
+}
+
+/* ---- dropzone ---- */
+.ga-drop {
+  border: 2px dashed #cbb48a;
+  border-radius: 12px;
+  background: #fffdf7;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.ga-drop p {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.ga-drop.is-over {
+  background: #fff4de;
+  border-color: #e4a11b;
+}
+
+.ga-drop.is-busy {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.ga-results {
+  margin: 16px 0 4px;
+}
+
+.ga-subhead {
+  font-size: 1.3rem;
+  margin: 30px 0 14px;
+}
+
+/* ---- sections ---- */
+.ga-sections {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.ga-tab {
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.ga-tab:hover {
+  border-color: #e4a11b;
+}
+
+.ga-tab.is-active {
+  background: #e4a11b;
+  border-color: #e4a11b;
+  color: #fff;
+  font-weight: 700;
+}
+
+.ga-count {
+  display: inline-block;
+  min-width: 1.4em;
+  text-align: center;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-left: 4px;
+}
+
+.ga-newsection {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.ga-newsection input {
+  flex: 1 1 260px;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.ga-newsection button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #444;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.ga-newsection button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.ga-del-section {
+  margin-left: 12px;
+  font-size: 0.8rem;
+  vertical-align: middle;
+}
+
+/* ---- grid ---- */
+.ga-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.ga-item {
+  margin: 0;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.ga-item img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  background: #f0f0f0;
+}
+
+.ga-item figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  font-size: 0.78rem;
+}
+
+.ga-item figcaption span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #555;
+}
+
+.ga-del {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  border-radius: 5px;
+  padding: 3px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.ga-del:hover {
+  background: #dc3545;
+  color: #fff;
+}
+
+@media (max-width: 600px) {
+  .ga-wrap {
+    padding-top: 90px;
+  }
+  .ga-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
