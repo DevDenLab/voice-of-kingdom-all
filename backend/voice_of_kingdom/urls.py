@@ -17,6 +17,15 @@ urlpatterns = [
     path("api/", include("apis.urls")),
     path("api/gallery-images/", views.get_gallery_images, name="gallery-images"),
 
+    # Admin gallery management (session + is_staff)
+    path("api/gallery/session/", views.GallerySessionView.as_view(), name="gallery-session"),
+    path("api/gallery/login/", views.GalleryLoginView.as_view(), name="gallery-login"),
+    path("api/gallery/logout/", views.GalleryLogoutView.as_view(), name="gallery-logout"),
+    path("api/gallery/sections/", views.GallerySectionsView.as_view(), name="gallery-sections"),
+    path("api/gallery/manage/", views.GalleryManageView.as_view(), name="gallery-manage"),
+    path("api/gallery/upload/", views.GalleryUploadView.as_view(), name="gallery-upload"),
+    path("api/gallery/delete/", views.GalleryDeleteView.as_view(), name="gallery-delete"),
+
     # Legacy top-level CSRF endpoint (kept for the existing frontend)
     path("csrf/", csrf, name="csrf"),
 ]

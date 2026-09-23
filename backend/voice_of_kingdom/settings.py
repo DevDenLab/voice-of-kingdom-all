@@ -206,6 +206,9 @@ else:
 # Prefix inside the bucket that the public gallery reads from.
 GALLERY_PREFIX = os.getenv("GALLERY_PREFIX", "gallery/")
 
+# Max size per file for admin gallery uploads (/api/gallery/upload/).
+GALLERY_MAX_UPLOAD_MB = int(os.getenv("GALLERY_MAX_UPLOAD_MB", "15"))
+
 # ---------------------------------------------------------------------------
 # Email
 # ---------------------------------------------------------------------------

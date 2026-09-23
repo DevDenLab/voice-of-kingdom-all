@@ -59,7 +59,7 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-dark">
       <div className="container">
         <a className="navbar-brand" href="/">
-          <img src="static/logo_new.png" alt="logo" />
+          <img src="/static/logo_new.png" alt="logo" />
         </a>
 
         {/* Main Desktop Nav Links */}
