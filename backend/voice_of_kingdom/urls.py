@@ -25,6 +25,7 @@ urlpatterns = [
     path("api/gallery/manage/", views.GalleryManageView.as_view(), name="gallery-manage"),
     path("api/gallery/upload/", views.GalleryUploadView.as_view(), name="gallery-upload"),
     path("api/gallery/delete/", views.GalleryDeleteView.as_view(), name="gallery-delete"),
+    path("api/gallery/order/", views.GalleryOrderView.as_view(), name="gallery-order"),
 
     # Legacy top-level CSRF endpoint (kept for the existing frontend)
     path("csrf/", csrf, name="csrf"),

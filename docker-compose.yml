@@ -23,6 +23,7 @@ services:
     environment:
       CHOKIDAR_USEPOLLING: "true"
       WDS_SOCKET_PORT: "3000"
+      REACT_APP_BACKEND_ORIGIN: http://backend:8000
       REACT_APP_IMG_BASE: http://localhost:8080
       REACT_APP_MEDIA_BASE: http://localhost:9000/vokim-media
       REACT_APP_MEDIA_BUCKET: vokim-media
@@ -95,7 +96,7 @@ services:
       retries: 20
 
   minio:
-    image: minio/minio:latest
+    image: quay.io/minio/minio:latest
     command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: vokim-admin
@@ -112,14 +113,15 @@ services:
       retries: 20
 
   minio-init:
-    image: minio/mc:latest
+    image: quay.io/minio/mc:latest
     depends_on:
       minio: {condition: service_healthy}
     entrypoint: >
       /bin/sh -c "
       mc alias set local http://minio:9000 vokim-admin vokim-admin-dev-password &&
       mc mb --ignore-existing local/vokim-media &&
-      mc anonymous set download local/vokim-media
+      mc anonymous set download local/vokim-media &&
+      tail -f /dev/null
       "
     restart: "no"
 

@@ -7,6 +7,7 @@ const SESSION_URL = '/api/gallery/session/';
 const LOGIN_URL = '/api/gallery/login/';
 const LOGOUT_URL = '/api/gallery/logout/';
 const MANAGE_URL = '/api/gallery/manage/';
+const ORDER_URL = '/api/gallery/order/';
 const SECTIONS_URL = '/api/gallery/sections/';
 const UPLOAD_URL = '/api/gallery/upload/';
 const DELETE_URL = '/api/gallery/delete/';
@@ -139,6 +140,20 @@ const GalleryAdmin = () => {
     }
   };
 
+  const moveSection = async (slug, delta) => {
+    const slugs = sections.filter((s) => s.editable).map((s) => s.slug);
+    const from = slugs.indexOf(slug);
+    const to = from + delta;
+    if (from < 0 || to < 0 || to >= slugs.length) return;
+    slugs.splice(to, 0, slugs.splice(from, 1)[0]);
+    try {
+      await apiFetch(SECTIONS_URL, { method: 'PUT', body: JSON.stringify({ slugs }) });
+      await loadData();
+    } catch (err) {
+      alert(`Could not move section: ${err.message}`);
+    }
+  };
+
   // ---- upload ----
   const uploadFiles = useCallback(
     async (fileList) => {
@@ -184,6 +199,27 @@ const GalleryAdmin = () => {
       await loadData();
     } catch (err) {
       alert(`Could not delete: ${err.message}`);
+    }
+  };
+
+  // ---- reorder ----
+  // Moves one image to a new position within its section, updates the grid
+  // immediately, then saves; reloads from the server if the save fails.
+  const moveImage = async (key, toIndex) => {
+    const inSection = images.filter((img) => img.section === activeSlug);
+    const from = inSection.findIndex((img) => img.key === key);
+    if (from < 0 || toIndex < 0 || toIndex >= inSection.length || from === toIndex) return;
+    const next = [...inSection];
+    next.splice(toIndex, 0, next.splice(from, 1)[0]);
+    setImages([...images.filter((img) => img.section !== activeSlug), ...next]);
+    try {
+      await apiFetch(ORDER_URL, {
+        method: 'POST',
+        body: JSON.stringify({ section: activeSlug, keys: next.map((img) => img.key) }),
+      });
+    } catch (err) {
+      alert(`Could not save the new order: ${err.message}`);
+      await loadData();
     }
   };
 
@@ -291,13 +327,33 @@ const GalleryAdmin = () => {
           <h2 className="ga-subhead">
             {activeSection.title}
             {activeSection.editable && (
-              <button
-                type="button"
-                className="ga-del ga-del-section"
-                onClick={() => deleteSection(activeSection)}
-              >
-                Delete section
-              </button>
+              <>
+                <span className="ga-move ga-move-section">
+                  <button
+                    type="button"
+                    aria-label="Move section earlier"
+                    disabled={sections.filter((s) => s.editable)[0]?.slug === activeSlug}
+                    onClick={() => moveSection(activeSlug, -1)}
+                  >
+                    &larr;
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Move section later"
+                    disabled={sections.filter((s) => s.editable).slice(-1)[0]?.slug === activeSlug}
+                    onClick={() => moveSection(activeSlug, 1)}
+                  >
+                    &rarr;
+                  </button>
+                </span>
+                <button
+                  type="button"
+                  className="ga-del ga-del-section"
+                  onClick={() => deleteSection(activeSection)}
+                >
+                  Delete section
+                </button>
+              </>
             )}
           </h2>
 
@@ -350,11 +406,44 @@ const GalleryAdmin = () => {
           )}
 
           <div className="ga-grid">
-            {activeImages.map((img) => (
-              <figure key={img.key} className="ga-item">
-                <img src={galleryUrl(img.key)} alt={img.key} loading="lazy" />
+            {activeImages.map((img, idx) => (
+              <figure
+                key={img.key}
+                className={`ga-item ${activeSection.editable ? 'is-draggable' : ''}`}
+                draggable={activeSection.editable}
+                onDragStart={(e) => e.dataTransfer.setData('text/plain', img.key)}
+                onDragOver={(e) => activeSection.editable && e.preventDefault()}
+                onDrop={(e) => {
+                  const dragged = e.dataTransfer.getData('text/plain');
+                  if (activeSection.editable && dragged.startsWith('gallery/')) {
+                    e.preventDefault();
+                    moveImage(dragged, idx);
+                  }
+                }}
+              >
+                <img src={galleryUrl(img.key)} alt={img.key} loading="lazy" draggable={false} />
                 <figcaption>
                   <span title={img.key}>{img.key.split('/').pop()}</span>
+                  {activeSection.editable && (
+                    <span className="ga-move">
+                      <button
+                        type="button"
+                        aria-label="Move earlier"
+                        disabled={idx === 0}
+                        onClick={() => moveImage(img.key, idx - 1)}
+                      >
+                        &larr;
+                      </button>
+                      <button
+                        type="button"
+                        aria-label="Move later"
+                        disabled={idx === activeImages.length - 1}
+                        onClick={() => moveImage(img.key, idx + 1)}
+                      >
+                        &rarr;
+                      </button>
+                    </span>
+                  )}
                   <button
                     type="button"
                     className="ga-del"

@@ -163,8 +163,14 @@ def _collect_gallery(client):
             }
         )
 
-    for imgs in images_by_section.values():
+    for slug, imgs in images_by_section.items():
         imgs.sort(key=lambda i: i["last_modified"], reverse=True)
+        # A saved manual order wins; images not in it (new uploads) follow,
+        # newest first.
+        order = (manifest.get(slug) or {}).get("order") or []
+        if order:
+            rank = {key: n for n, key in enumerate(order)}
+            imgs.sort(key=lambda i: rank.get(i["key"], len(rank)))
 
     sections_meta = {}
     for slug in set(manifest) | seen:
@@ -175,19 +181,26 @@ def _collect_gallery(client):
         sections_meta[slug] = {
             "title": meta.get("title") or slug.replace("-", " ").title(),
             "created": meta.get("created"),
+            "position": meta.get("position"),
         }
     return sections_meta, images_by_section
 
 
 def _ordered_slugs(sections_meta):
-    """Real sections by title, Z->A (so "... 2026" sits above "... 2025");
-    the legacy "Uncategorised" bucket always last."""
-    real = sorted(
-        (s for s in sections_meta if s),
+    """Manually ordered sections first (admin "move" buttons), then the rest by
+    title Z->A (so "... 2026" sits above "... 2025"); the legacy
+    "Uncategorised" bucket always last."""
+    real = [s for s in sections_meta if s]
+    placed = sorted(
+        (s for s in real if sections_meta[s].get("position") is not None),
+        key=lambda s: sections_meta[s]["position"],
+    )
+    rest = sorted(
+        (s for s in real if sections_meta[s].get("position") is None),
         key=lambda s: sections_meta[s]["title"].lower(),
         reverse=True,
     )
-    return real + ([""] if "" in sections_meta else [])
+    return placed + rest + ([""] if "" in sections_meta else [])
 
 
 def _image_alt(key):
@@ -398,6 +411,37 @@ class GallerySectionsView(APIView):
         _bust_gallery_cache()
         return Response({"slug": slug, "title": title}, status=status.HTTP_201_CREATED)
 
+    def put(self, request):
+        """Save the manual section order: {"slugs": [...]} (top to bottom)."""
+        slugs = request.data.get("slugs")
+        if (
+            not isinstance(slugs, list)
+            or len(set(slugs)) != len(slugs)
+            or not all(isinstance(s, str) and SECTION_SLUG_RE.match(s) for s in slugs)
+        ):
+            return Response(
+                {"detail": "'slugs' must be a list of unique section ids."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        client = _s3_client()
+        try:
+            manifest = _load_manifest(client)
+            if any(s not in manifest for s in slugs):
+                return Response(
+                    {"detail": "Unknown section in list."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            for pos, slug in enumerate(slugs):
+                manifest[slug]["position"] = pos
+            _save_manifest(client, manifest)
+        except (ClientError, BotoCoreError) as exc:
+            logger.exception("Gallery admin: section reorder failed")
+            return Response(
+                {"detail": f"Storage error: {exc}"}, status=status.HTTP_502_BAD_GATEWAY
+            )
+        _bust_gallery_cache()
+        return Response({"count": len(slugs)})
+
     def delete(self, request):
         slug = (request.data.get("slug") or "").strip()
         if not slug or not SECTION_SLUG_RE.match(slug):
@@ -503,6 +547,51 @@ class GalleryUploadView(APIView):
 
         http_status = status.HTTP_201_CREATED if uploaded else status.HTTP_400_BAD_REQUEST
         return Response({"uploaded": uploaded, "errors": errors}, status=http_status)
+
+
+class GalleryOrderView(APIView):
+    """Save the manual image order for one section: {"section", "keys": [...]}."""
+
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAdminUser]
+
+    def post(self, request):
+        section = (request.data.get("section") or "").strip()
+        keys = request.data.get("keys")
+        if not section or not SECTION_SLUG_RE.match(section):
+            return Response(
+                {"detail": "A valid section id is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        prefix = f"{settings.GALLERY_PREFIX}{section}/"
+        if (
+            not isinstance(keys, list)
+            or len(set(keys)) != len(keys)
+            or not all(isinstance(k, str) and k.startswith(prefix) for k in keys)
+        ):
+            return Response(
+                {"detail": "'keys' must be a list of unique image keys in this section."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        client = _s3_client()
+        try:
+            manifest = _load_manifest(client)
+            if section not in manifest:
+                return Response(
+                    {"detail": f"Unknown section \"{section}\"."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            manifest[section]["order"] = keys
+            _save_manifest(client, manifest)
+        except (ClientError, BotoCoreError) as exc:
+            logger.exception("Gallery admin: reorder failed")
+            return Response(
+                {"detail": f"Storage error: {exc}"}, status=status.HTTP_502_BAD_GATEWAY
+            )
+
+        _bust_gallery_cache()
+        return Response({"section": section, "count": len(keys)})
 
 
 class GalleryDeleteView(APIView):

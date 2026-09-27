@@ -280,6 +280,38 @@ a.ga-link {
   color: #fff;
 }
 
+.ga-item.is-draggable {
+  cursor: grab;
+}
+
+.ga-item figcaption .ga-move {
+  display: flex;
+  gap: 4px;
+  overflow: visible;
+  flex-shrink: 0;
+}
+
+.ga-move button {
+  background: none;
+  border: 1px solid #ccc;
+  color: #555;
+  border-radius: 5px;
+  padding: 3px 7px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.ga-move-section {
+  display: inline-flex;
+  margin-left: 12px;
+  vertical-align: middle;
+}
+
+.ga-move button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
 @media (max-width: 600px) {
   .ga-wrap {
     padding-top: 90px;
