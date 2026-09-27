@@ -144,7 +144,7 @@ services:
 
   # Creates the bucket and makes the media prefix publicly readable. Runs once.
   minio-init:
-    image: minio/mc:latest
+    image: quay.io/minio/mc:latest
     container_name: vokim-minio-init
     depends_on:
       minio: {condition: service_healthy}
