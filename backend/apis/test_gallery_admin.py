@@ -117,6 +117,35 @@ class GalleryAdminTests(TestCase):
         r = self.client.post("/api/gallery/sections/", {"title": "Vokim 2025"}, format="json")
         self.assertEqual(r.status_code, 400)
 
+    def test_rename_section_keeps_slug(self):
+        self._login()
+        self._make_section("vokim-2025", "Vokim 2025")
+        r = self.client.patch(
+            "/api/gallery/sections/", {"slug": "vokim-2025", "title": "Summer Camp"}, format="json"
+        )
+        self.assertEqual(r.status_code, 200)
+        manifest = json.loads(self.s3.store["gallery/.sections.json"])
+        self.assertEqual(manifest["vokim-2025"]["title"], "Summer Camp")
+        self.assertEqual(manifest["vokim-2025"]["created"], "2026-01-01T00:00:00")
+
+    def test_rename_section_rejects_blank_and_unknown(self):
+        self._login()
+        self._make_section("vokim-2025", "Vokim 2025")
+        blank = self.client.patch(
+            "/api/gallery/sections/", {"slug": "vokim-2025", "title": "  "}, format="json"
+        )
+        self.assertEqual(blank.status_code, 400)
+        missing = self.client.patch(
+            "/api/gallery/sections/", {"slug": "nope", "title": "X"}, format="json"
+        )
+        self.assertEqual(missing.status_code, 404)
+
+    def test_rename_section_requires_auth(self):
+        r = self.client.patch(
+            "/api/gallery/sections/", {"slug": "vokim-2025", "title": "X"}, format="json"
+        )
+        self.assertEqual(r.status_code, 403)
+
     def test_delete_section_cascades(self):
         self._login()
         self._make_section("2025", "Vokim 2025")

@@ -225,6 +225,23 @@ a.ga-link {
   vertical-align: middle;
 }
 
+.ga-rename-section {
+  margin-left: 12px;
+  font-size: 0.8rem;
+  vertical-align: middle;
+  background: none;
+  border: 1px solid #6c757d;
+  color: #6c757d;
+  border-radius: 5px;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+
+.ga-rename-section:hover {
+  background: #6c757d;
+  color: #fff;
+}
+
 /* ---- grid ---- */
 .ga-grid {
   display: grid;

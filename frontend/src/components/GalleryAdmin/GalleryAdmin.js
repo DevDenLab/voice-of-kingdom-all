@@ -140,6 +140,20 @@ const GalleryAdmin = () => {
     }
   };
 
+  const renameSection = async (section) => {
+    const title = window.prompt('New name for this section:', section.title);
+    if (title === null || !title.trim() || title.trim() === section.title) return;
+    try {
+      await apiFetch(SECTIONS_URL, {
+        method: 'PATCH',
+        body: JSON.stringify({ slug: section.slug, title: title.trim() }),
+      });
+      await loadData();
+    } catch (err) {
+      alert(`Could not rename section: ${err.message}`);
+    }
+  };
+
   const moveSection = async (slug, delta) => {
     const slugs = sections.filter((s) => s.editable).map((s) => s.slug);
     const from = slugs.indexOf(slug);
@@ -346,6 +360,13 @@ const GalleryAdmin = () => {
                     &rarr;
                   </button>
                 </span>
+                <button
+                  type="button"
+                  className="ga-rename-section"
+                  onClick={() => renameSection(activeSection)}
+                >
+                  Rename
+                </button>
                 <button
                   type="button"
                   className="ga-del ga-del-section"

@@ -442,6 +442,38 @@ class GallerySectionsView(APIView):
         _bust_gallery_cache()
         return Response({"count": len(slugs)})
 
+    def patch(self, request):
+        """Rename a section: {"slug": "...", "title": "..."}. The slug (and so
+        every image key under it) stays the same; only the display title changes."""
+        slug = request.data.get("slug")
+        title = (request.data.get("title") or "").strip()
+        if not isinstance(slug, str) or not SECTION_SLUG_RE.match(slug):
+            return Response(
+                {"detail": "A valid section id is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if not title:
+            return Response(
+                {"detail": "A section name is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        client = _s3_client()
+        try:
+            manifest = _load_manifest(client)
+            if slug not in manifest:
+                return Response(
+                    {"detail": "Unknown section."}, status=status.HTTP_404_NOT_FOUND
+                )
+            manifest[slug]["title"] = title
+            _save_manifest(client, manifest)
+        except (ClientError, BotoCoreError) as exc:
+            logger.exception("Gallery admin: section rename failed")
+            return Response(
+                {"detail": f"Storage error: {exc}"}, status=status.HTTP_502_BAD_GATEWAY
+            )
+        _bust_gallery_cache()
+        return Response({"slug": slug, "title": title})
+
     def delete(self, request):
         slug = (request.data.get("slug") or "").strip()
         if not slug or not SECTION_SLUG_RE.match(slug):
