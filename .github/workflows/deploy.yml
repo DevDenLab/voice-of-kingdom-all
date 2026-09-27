@@ -1,25 +1,27 @@
-name: Deploy to Oracle VM
+name: Deploy to AWS EC2
 
-# Fires when prod moves. Builds both images, pushes them to GitHub Container
-# Registry, then SSHes into the Oracle VM and rolls the stack forward.
+# Fires on every push to develop or prod. Builds both images, pushes them to GitHub Container
+# Registry, then SSHes into the EC2 instance and rolls the stack forward.
 #
 # Required repository secrets (Settings -> Secrets and variables -> Actions):
-#   OCI_HOST            public IP of the Oracle VM
-#   OCI_USER            ssh user (ubuntu / opc)
-#   OCI_SSH_KEY         private key, full PEM including BEGIN/END lines
-#   OCI_SSH_PORT        optional, defaults to 22
-#   OCI_APP_DIR         optional, defaults to /opt/vokim
+#   EC2_HOST            Elastic IP of the EC2 instance
+#   EC2_USER            ssh user (ubuntu)
+#   EC2_SSH_KEY         private key, full PEM including BEGIN/END lines
+#   EC2_SSH_PORT        optional, defaults to 22
+#   EC2_APP_DIR         optional, defaults to /opt/vokim
+#   ADMIN_PASSWORD      password for the site admin created on every deploy
+#   ADMIN_USERNAME      optional, defaults to admin
 # GITHUB_TOKEN is provided automatically and is what pushes to ghcr.io.
 #
-# Images are built for linux/arm64 because Oracle's Always Free compute
-# (Ampere A1) is ARM, not x86 -- confirm with `uname -m` on the VM if this
+# Images are built for linux/arm64 because the EC2 instance is a t4g
+# (Graviton) ARM machine, not x86 -- confirm with `uname -m` on the VM if this
 # ever changes. The runner itself is x86_64, so the arm64 build runs under
 # QEMU emulation (docker/setup-qemu-action below), which is slower than a
 # native build but requires no extra infrastructure.
 
 on:
   push:
-    branches: [prod]
+    branches: [develop, prod]
   workflow_dispatch:
     inputs:
       skip_tests:
@@ -103,7 +105,7 @@ jobs:
 
   # ---------------------------------------------------------------- 2. deploy
   deploy:
-    name: Roll out on Oracle VM
+    name: Roll out on EC2
     runs-on: ubuntu-latest
     needs: build
     environment:
@@ -116,12 +118,12 @@ jobs:
       - name: Copy infra files to the VM
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.OCI_HOST }}
-          username: ${{ secrets.OCI_USER }}
-          key: ${{ secrets.OCI_SSH_KEY }}
-          port: ${{ secrets.OCI_SSH_PORT || 22 }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: ${{ secrets.EC2_SSH_PORT || 22 }}
           source: "infra/docker-compose.prod.yml,infra/caddy/Caddyfile"
-          target: ${{ secrets.OCI_APP_DIR || '/opt/vokim' }}
+          target: ${{ secrets.EC2_APP_DIR || '/opt/vokim' }}
           strip_components: 1
           overwrite: true
 
@@ -129,16 +131,18 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         env:
           IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
+          ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME || 'admin' }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
         with:
-          host: ${{ secrets.OCI_HOST }}
-          username: ${{ secrets.OCI_USER }}
-          key: ${{ secrets.OCI_SSH_KEY }}
-          port: ${{ secrets.OCI_SSH_PORT || 22 }}
-          envs: IMAGE_TAG
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: ${{ secrets.EC2_SSH_PORT || 22 }}
+          envs: IMAGE_TAG,ADMIN_USERNAME,ADMIN_PASSWORD
           command_timeout: 15m
           script: |
             set -euo pipefail
-            APP_DIR="${{ secrets.OCI_APP_DIR || '/opt/vokim' }}"
+            APP_DIR="${{ secrets.EC2_APP_DIR || '/opt/vokim' }}"
             cd "$APP_DIR"
 
             # .env lives only on the VM and is never in git.
@@ -174,6 +178,23 @@ jobs:
             for i in $(seq 1 30); do
               if curl -fsS http://localhost/healthz/ >/dev/null 2>&1; then
                 echo "backend healthy after ${i} attempts"
+
+                # Create the gallery/Django admin, or reset its password to the
+                # ADMIN_PASSWORD secret, so the secret is the source of truth.
+                if [ -n "${ADMIN_PASSWORD:-}" ]; then
+                  docker compose --env-file .env -f docker-compose.prod.yml exec -T                     -e ADMIN_USERNAME -e ADMIN_PASSWORD backend python manage.py shell -c "
+            import os
+            from django.contrib.auth import get_user_model
+            U = get_user_model()
+            u, created = U.objects.get_or_create(username=os.environ['ADMIN_USERNAME'])
+            u.is_staff = u.is_superuser = u.is_active = True
+            u.set_password(os.environ['ADMIN_PASSWORD'])
+            u.save()
+            print('admin user', 'created' if created else 'updated')
+            "
+                else
+                  echo "::warning::ADMIN_PASSWORD secret not set - skipping admin user"
+                fi
                 exit 0
               fi
               sleep 5
