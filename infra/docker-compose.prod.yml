@@ -120,7 +120,7 @@ services:
 
   # ---------------------------------------------------------------- minio (S3)
   minio:
-    image: minio/minio:latest
+    image: quay.io/minio/minio:latest
     container_name: vokim-minio
     restart: unless-stopped
     command: server /data --console-address ":9001"
