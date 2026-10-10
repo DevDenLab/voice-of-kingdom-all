@@ -96,7 +96,7 @@ jobs:
           build-args: |
             REACT_APP_API_URL=
             REACT_APP_IMG_BASE=/img
-            REACT_APP_MEDIA_BASE=/media
+            REACT_APP_MEDIA_BASE=${{ vars.CDN_BASE }}
             REACT_APP_CDN_BASE=${{ vars.CDN_BASE }}
           tags: |
             ${{ steps.meta.outputs.namespace }}/frontend:${{ steps.meta.outputs.tag }}
