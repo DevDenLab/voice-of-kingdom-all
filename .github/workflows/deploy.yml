@@ -40,7 +40,10 @@ jobs:
   # ---------------------------------------------------------------- 1. build
   build:
     name: Build & push images
-    runs-on: ubuntu-latest
+    # Native arm64 runner (free for public repos): the EC2 box is a t4g (Graviton), so
+    # building here needs no QEMU emulation -- which was ~10x slower and crashed
+    # `npm install` with "Illegal instruction".
+    runs-on: ubuntu-24.04-arm
     permissions:
       contents: read
       packages: write
@@ -61,10 +64,6 @@ jobs:
           repo_lower=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')
           echo "namespace=ghcr.io/${repo_lower}" >> "$GITHUB_OUTPUT"
           echo "Building tag ${GITHUB_SHA::12} for ${repo_lower}"
-
-      - uses: docker/setup-qemu-action@v3
-        with:
-          platforms: arm64
 
       - uses: docker/setup-buildx-action@v3
 
