@@ -9,9 +9,12 @@ WORKDIR /app
 ARG REACT_APP_API_URL=""
 ARG REACT_APP_IMG_BASE="/img"
 ARG REACT_APP_MEDIA_BASE="/media"
+# CloudFront URL in front of the S3 bucket, e.g. https://media.vokim.ca (empty = use imgproxy)
+ARG REACT_APP_CDN_BASE=""
 ENV REACT_APP_API_URL=$REACT_APP_API_URL \
     REACT_APP_IMG_BASE=$REACT_APP_IMG_BASE \
     REACT_APP_MEDIA_BASE=$REACT_APP_MEDIA_BASE \
+    REACT_APP_CDN_BASE=$REACT_APP_CDN_BASE \
     GENERATE_SOURCEMAP=false \
     CI=false
 

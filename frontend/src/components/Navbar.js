@@ -9,6 +9,7 @@ const Navbar = () => {
   const menuItems = [
     { name: 'Home', link: '/', id: 'home' },
     { name: 'About Us', link: '/about', id: 'about' },
+    { name: 'Meet the Team', link: '/team', id: 'team' },
     { name: 'Our Music', link: '/music', id: 'music' },
     { name: 'JOIN Vokim', link: '/join', id: 'join' },
     { name: 'Bookings', link: '/band-book', id: 'band-book' },

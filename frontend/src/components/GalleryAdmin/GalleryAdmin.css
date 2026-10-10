@@ -329,6 +329,149 @@ a.ga-link {
   cursor: default;
 }
 
+/* ---- dashboard tabs ---- */
+.ga-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 14px;
+}
+
+.ga-maintab {
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.ga-maintab:hover {
+  border-color: #e4a11b;
+}
+
+.ga-maintab.is-active {
+  background: #222;
+  border-color: #222;
+  color: #fff;
+  font-weight: 700;
+}
+
+.ga-panel-note {
+  margin: -6px 0 14px;
+}
+
+/* ---- drag & drop reordering ---- */
+.ga-tab[draggable='true'] {
+  cursor: grab;
+}
+
+.ga-tab.is-drop-target,
+.ga-item.is-drop-target {
+  outline: 2px dashed #e4a11b;
+  outline-offset: 2px;
+}
+
+.ga-sort-hint {
+  margin: -6px 0 12px;
+}
+
+/* ---- poster ---- */
+.ga-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.ga-switch input {
+  width: 18px;
+  height: 18px;
+  accent-color: #e4a11b;
+}
+
+.ga-poster {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.ga-poster img {
+  max-width: 320px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+}
+
+/* ---- team ---- */
+.ga-newmember input[type='file'] {
+  flex: 1 1 200px;
+  font-size: 0.85rem;
+}
+
+.ga-member img,
+.ga-nophoto {
+  aspect-ratio: 4 / 5;
+  width: 100%;
+  object-fit: cover;
+}
+
+.ga-nophoto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  color: #999;
+  font-size: 0.85rem;
+}
+
+.ga-member-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 10px 0;
+}
+
+.ga-member-body input[type='text'] {
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.85rem;
+}
+
+.ga-member-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.ga-member-actions button {
+  flex: 1;
+  padding: 5px 6px;
+  border: 1px solid #444;
+  border-radius: 5px;
+  background: #444;
+  color: #fff;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.ga-member-actions button:last-of-type {
+  background: none;
+  color: #444;
+}
+
+.ga-member-actions button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
 @media (max-width: 600px) {
   .ga-wrap {
     padding-top: 90px;

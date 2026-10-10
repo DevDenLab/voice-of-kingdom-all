@@ -1,0 +1,136 @@
+.team {
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.team-heading {
+  text-align: center;
+  margin-top: 80px; /* clears the fixed navbar */
+  font-size: 40px;
+  color: #222;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.team-intro {
+  max-width: 640px;
+  margin: 12px auto 36px;
+  text-align: center;
+  color: #666;
+  line-height: 1.6;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+  padding: 10px 20px 40px;
+}
+
+.team-card {
+  text-align: center;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding-bottom: 16px;
+  opacity: 0;
+  animation: team-fade 0.5s ease-in forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.team-photo {
+  aspect-ratio: 4 / 5;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.team-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.team-initials {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #E4A11B;
+}
+
+.team-name {
+  margin: 14px 12px 2px;
+  font-size: 1.15rem;
+  color: #222;
+}
+
+.team-role {
+  margin: 0 12px;
+  font-size: 0.9rem;
+  color: #E4A11B;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.team-empty {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+}
+
+.team-error {
+  text-align: center;
+  padding: 20px;
+  margin: 20px;
+  color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.1);
+  border-radius: 8px;
+}
+
+.team-loading {
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+}
+
+.team-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #E4A11B;
+  border-radius: 50%;
+  animation: team-spin 1s linear infinite;
+}
+
+@keyframes team-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes team-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .team { padding: 10px; }
+  .team-heading { font-size: 28px; margin-top: 70px; }
+  .team-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; padding: 10px; }
+}
+
+@media (max-width: 480px) {
+  .team-grid { grid-template-columns: 1fr; }
+}

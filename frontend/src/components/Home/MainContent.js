@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
-const MainContent = ({ imageUrl }) => {
+const MainContent = ({ imageUrl, showCountdown = false }) => {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -69,6 +69,7 @@ const MainContent = ({ imageUrl }) => {
       <div className="hero-section-home" style={{ '--bg-image': `url(${imageUrl})` }}>
         <div className="hero-overlay-home"></div>
         <div className="hero-content">
+          {showCountdown && (
           <div className="countdown-container">
             <div className="countdown-title">VOKIM EXPERIENCE 2026 STARTS IN</div>
             <div className="countdown-timer">
@@ -90,6 +91,7 @@ const MainContent = ({ imageUrl }) => {
               </div>
             </div>
           </div>
+          )}
           <div className="content-wrapper-home">
             <h1 className="main-title">RAISING VOICES</h1>
             <h1 className="main-title">EXPANDING HIS KINGDOM: EXALTING JESUS</h1>

@@ -30,6 +30,7 @@ from django.utils.decorators import method_decorator
 from django.utils.text import slugify
 from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_cookie
 from PIL import Image, UnidentifiedImageError
+from .variants import build_variants, delete_variants
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.parsers import FormParser, MultiPartParser
@@ -494,6 +495,7 @@ class GallerySectionsView(APIView):
                 client.delete_object(
                     Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=key
                 )
+                delete_variants(client, key)
             manifest = _load_manifest(client)
             if manifest.pop(slug, None) is not None:
                 _save_manifest(client, manifest)
@@ -572,6 +574,7 @@ class GalleryUploadView(APIView):
                 errors.append({"name": f.name, "error": f"Storage error: {exc}"})
                 continue
 
+            build_variants(client, key, data)
             uploaded.append({"name": f.name, "key": key})
 
         if uploaded:
@@ -638,9 +641,9 @@ class GalleryDeleteView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         try:
-            _s3_client().delete_object(
-                Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=key
-            )
+            client = _s3_client()
+            client.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=key)
+            delete_variants(client, key)
         except (ClientError, BotoCoreError) as exc:
             logger.exception("Gallery admin: delete failed for %s", key)
             return Response(

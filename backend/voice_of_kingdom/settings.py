@@ -180,7 +180,8 @@ STORAGES = {
 USE_S3_MEDIA = env_bool("USE_S3_MEDIA", True)
 
 AWS_STORAGE_BUCKET_NAME = os.getenv("S3_BUCKET", "vokim-media")
-AWS_S3_ENDPOINT_URL = os.getenv("S3_ENDPOINT_URL", "http://minio:9000")
+# Leave S3_ENDPOINT_URL empty to talk to real AWS S3 (boto3 picks the regional endpoint).
+AWS_S3_ENDPOINT_URL = os.getenv("S3_ENDPOINT_URL", "http://minio:9000") or None
 AWS_S3_CUSTOM_DOMAIN = os.getenv("S3_PUBLIC_DOMAIN") or None
 AWS_ACCESS_KEY_ID = os.getenv("S3_ACCESS_KEY", "")
 AWS_SECRET_ACCESS_KEY = os.getenv("S3_SECRET_KEY", "")
@@ -205,6 +206,9 @@ else:
 
 # Prefix inside the bucket that the public gallery reads from.
 GALLERY_PREFIX = os.getenv("GALLERY_PREFIX", "gallery/")
+
+# Prefix for editable site content (event highlights, poster, team) + its manifest.
+SITE_PREFIX = os.getenv("SITE_PREFIX", "site/")
 
 # Max size per file for admin gallery uploads (/api/gallery/upload/).
 GALLERY_MAX_UPLOAD_MB = int(os.getenv("GALLERY_MAX_UPLOAD_MB", "15"))

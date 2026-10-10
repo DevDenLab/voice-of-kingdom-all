@@ -72,14 +72,6 @@ export default function Footer() {
                 <MDBIcon icon="envelope" className="me-3" />
                 <a href="mailto:info@vokim.ca" style={{ color: '#ffffff' }}>info@vokim.ca</a>
               </p>
-              <p>
-                <MDBIcon icon="phone" className="me-3" />
-                <a href="tel:780 807 2238" style={{ color: '#ffffff' }}>+1 780 807 2238</a>
-              </p>
-              <p>
-                <MDBIcon icon="phone" className="me-3" />
-                <a href="tel:5876642692" style={{ color: '#ffffff' }}>+1 587 664 2692</a>
-              </p>
             </div>
           </MDBCol>
 

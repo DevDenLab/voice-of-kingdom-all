@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import { imageUrl } from "../../lib/imageUrl";
+import { thumbUrl } from "../../lib/imageUrl";
 
 // Media image component -- MinIO object served through imgproxy
 const MediaImage = ({ publicId, index }) => {
-  const url = imageUrl(publicId, { width: 400, height: 300, resize: "fill" });
+  const url = thumbUrl(publicId);
 
   return (
     <img 
@@ -151,7 +151,7 @@ const EventHighlights = ({ images = [], videos = [] }) => {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'image';
-      link.href = imageUrl(publicId, { width: 400, height: 300, resize: "fill" });
+      link.href = thumbUrl(publicId);
       document.head.appendChild(link);
     });
   }, [images]);

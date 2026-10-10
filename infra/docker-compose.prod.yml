@@ -61,7 +61,8 @@ services:
     environment:
       POSTGRES_HOST: postgres
       REDIS_URL: redis://redis:6379/1
-      S3_ENDPOINT_URL: http://minio:9000
+      # MinIO by default; set S3_ENDPOINT_URL= (empty) in .env to use real AWS S3
+      S3_ENDPOINT_URL: ${S3_ENDPOINT_URL-http://minio:9000}
     depends_on:
       postgres: {condition: service_healthy}
       redis: {condition: service_healthy}

@@ -15,6 +15,21 @@
 const IMG_BASE = process.env.REACT_APP_IMG_BASE || "/img";
 const BUCKET = process.env.REACT_APP_MEDIA_BUCKET || "vokim-media";
 
+/**
+ * CloudFront (or any CDN) in front of the S3 bucket. When set, images are
+ * served as the pre-sized WebP files the backend writes at upload time
+ * (backend/voice_of_kingdom/variants.py) -- static files from a CDN edge, no
+ * resize step per request. When empty, everything falls back to imgproxy.
+ */
+const CDN_BASE = (process.env.REACT_APP_CDN_BASE || "").replace(/\/+$/, "");
+
+function cdnVariantUrl(variant, key) {
+  const clean = key.replace(/^\/+/, "");
+  const dot = clean.lastIndexOf(".");
+  const stem = dot > clean.lastIndexOf("/") ? clean.slice(0, dot) : clean;
+  return `${CDN_BASE}/_v/${variant}/${stem}.webp`;
+}
+
 /** base64url encode, browser-safe, handles unicode keys */
 function b64url(input) {
   const bytes = new TextEncoder().encode(input);
@@ -50,7 +65,10 @@ export function imageUrl(key, opts = {}) {
     quality = 80,
     format = "webp",
     gravity = "sm", // smart gravity: keeps the subject in frame
+    variant, // pre-sized CDN copy: "gallery" | "thumb" | "preview" | "full" | "team"
   } = opts;
+
+  if (variant && CDN_BASE) return cdnVariantUrl(variant, key);
 
   const parts = [];
   if (width || height) {
@@ -67,11 +85,23 @@ export function imageUrl(key, opts = {}) {
 
 /** Square gallery thumbnail (was: c_fill,w_800,h_800,q_auto:good,f_auto) */
 export const galleryUrl = (key) =>
-  imageUrl(key, { width: 800, height: 800, resize: "fill", quality: 80 });
+  imageUrl(key, { width: 800, height: 800, resize: "fill", quality: 80, variant: "gallery" });
 
 /** Width-constrained preload (was: c_scale,w_800,q_auto:good) */
 export const previewUrl = (key) =>
-  imageUrl(key, { width: 800, resize: "fit", quality: 80 });
+  imageUrl(key, { width: 800, resize: "fit", quality: 80, variant: "preview" });
+
+/** 400x300 tile for the home Event Highlights */
+export const thumbUrl = (key) =>
+  imageUrl(key, { width: 400, height: 300, resize: "fill", quality: 80, variant: "thumb" });
+
+/** Up to 1600px wide, whole image -- the Experience poster */
+export const fullUrl = (key) =>
+  imageUrl(key, { width: 1600, resize: "fit", quality: 82, variant: "full" });
+
+/** 480x600 portrait for the team page */
+export const teamUrl = (key) =>
+  imageUrl(key, { width: 480, height: 600, resize: "fill", quality: 80, variant: "team" });
 
 /** Direct, untransformed object URL -- for PDFs and other non-images */
 export function mediaUrl(key) {

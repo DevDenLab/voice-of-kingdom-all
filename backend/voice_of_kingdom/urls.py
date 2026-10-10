@@ -5,7 +5,7 @@ from django.urls import include, path
 
 from apis.urls import csrf
 
-from . import views
+from . import site_content, views
 
 urlpatterns = [
     # Health probe for Docker HEALTHCHECK / Caddy
@@ -26,6 +26,12 @@ urlpatterns = [
     path("api/gallery/upload/", views.GalleryUploadView.as_view(), name="gallery-upload"),
     path("api/gallery/delete/", views.GalleryDeleteView.as_view(), name="gallery-delete"),
     path("api/gallery/order/", views.GalleryOrderView.as_view(), name="gallery-order"),
+
+    # Editable home/team content (public read, admin write)
+    path("api/site-content/", site_content.site_content, name="site-content"),
+    path("api/site/highlights/", site_content.HighlightsView.as_view(), name="site-highlights"),
+    path("api/site/poster/", site_content.PosterView.as_view(), name="site-poster"),
+    path("api/site/team/", site_content.TeamView.as_view(), name="site-team"),
 
     # Legacy top-level CSRF endpoint (kept for the existing frontend)
     path("csrf/", csrf, name="csrf"),

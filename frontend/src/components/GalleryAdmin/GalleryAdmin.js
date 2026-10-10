@@ -2,6 +2,15 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './GalleryAdmin.css';
 import { apiFetch } from '../../lib/api';
 import { galleryUrl } from '../../lib/imageUrl';
+import { moveItem, useDragSort } from './Sortable';
+import { HighlightsPanel, PosterPanel, TeamPanel } from './DashboardPanels';
+
+const TABS = [
+  { id: 'gallery', label: 'Gallery' },
+  { id: 'highlights', label: 'Event Highlights' },
+  { id: 'poster', label: 'Experience Poster' },
+  { id: 'team', label: 'Team' },
+];
 
 const SESSION_URL = '/api/gallery/session/';
 const LOGIN_URL = '/api/gallery/login/';
@@ -34,6 +43,7 @@ const GalleryAdmin = () => {
   const [sectionBusy, setSectionBusy] = useState(false);
   const [sectionError, setSectionError] = useState('');
   const fileInputRef = useRef(null);
+  const [tab, setTab] = useState('gallery');
 
   // ---- session ----
   useEffect(() => {
@@ -154,19 +164,30 @@ const GalleryAdmin = () => {
     }
   };
 
-  const moveSection = async (slug, delta) => {
-    const slugs = sections.filter((s) => s.editable).map((s) => s.slug);
-    const from = slugs.indexOf(slug);
-    const to = from + delta;
-    if (from < 0 || to < 0 || to >= slugs.length) return;
-    slugs.splice(to, 0, slugs.splice(from, 1)[0]);
+  // Moves the editable section at index `from` to index `to` (drag-and-drop and
+  // the arrow buttons both end up here). The tabs update immediately, then it saves.
+  const reorderSections = async (from, to) => {
+    const editable = sections.filter((s) => s.editable);
+    if (from < 0 || to < 0 || from >= editable.length || to >= editable.length || from === to) return;
+    const next = moveItem(editable, from, to);
+    setSections([...next, ...sections.filter((s) => !s.editable)]);
     try {
-      await apiFetch(SECTIONS_URL, { method: 'PUT', body: JSON.stringify({ slugs }) });
-      await loadData();
+      await apiFetch(SECTIONS_URL, {
+        method: 'PUT',
+        body: JSON.stringify({ slugs: next.map((s) => s.slug) }),
+      });
     } catch (err) {
       alert(`Could not move section: ${err.message}`);
     }
+    await loadData();
   };
+
+  const moveSection = (slug, delta) => {
+    const from = sections.filter((s) => s.editable).findIndex((s) => s.slug === slug);
+    reorderSections(from, from + delta);
+  };
+
+  const sectionSort = useDragSort(reorderSections);
 
   // ---- upload ----
   const uploadFiles = useCallback(
@@ -303,16 +324,41 @@ const GalleryAdmin = () => {
         </div>
       </div>
 
+      <div className="ga-tabs" role="tablist">
+        {TABS.map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            role="tab"
+            aria-selected={tab === t.id}
+            className={`ga-maintab ${tab === t.id ? 'is-active' : ''}`}
+            onClick={() => setTab(t.id)}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'highlights' && <HighlightsPanel />}
+      {tab === 'poster' && <PosterPanel />}
+      {tab === 'team' && <TeamPanel />}
+
+      {tab === 'gallery' && (
+      <>
       {/* --- sections --- */}
       <h2 className="ga-subhead">Sections</h2>
       {listError && <p className="ga-error">{listError}</p>}
+      {sections.filter((s) => s.editable).length > 1 && (
+        <p className="ga-muted ga-sort-hint">Drag a section tab to change the order they appear on the gallery page.</p>
+      )}
       <div className="ga-sections">
-        {sections.map((s) => (
+        {sections.map((s, i) => (
           <button
             key={s.slug || 'root'}
             type="button"
-            className={`ga-tab ${s.slug === activeSlug ? 'is-active' : ''}`}
+            className={`ga-tab ${s.slug === activeSlug ? 'is-active' : ''} ${sectionSort.over === i && s.editable ? 'is-drop-target' : ''}`}
             onClick={() => setActiveSlug(s.slug)}
+            {...sectionSort.props(i, s.editable)}
           >
             {s.title} <span className="ga-count">{s.count}</span>
           </button>
@@ -480,6 +526,8 @@ const GalleryAdmin = () => {
             <p className="ga-muted">No images in this section yet.</p>
           )}
         </>
+      )}
+      </>
       )}
     </div>
   );

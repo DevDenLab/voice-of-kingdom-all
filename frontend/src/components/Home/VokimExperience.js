@@ -1,6 +1,7 @@
 import React from 'react';
+import { fullUrl } from '../../lib/imageUrl';
 
-const VokimExperience = () => {
+const VokimExperience = ({ posterKey = null }) => {
   return (
     <section style={s.section}>
 
@@ -11,17 +12,18 @@ const VokimExperience = () => {
         <p style={s.subHeading}>A Night of African Praise</p>
       </div>
 
-      {/* ── FLYER + EVENT DETAILS ── */}
+      {/* ── POSTER + EVENT DETAILS ── (poster is uploaded from the dashboard) */}
       <div style={s.contentRow}>
 
-        {/* Primary flyer (KEY) */}
-        <div style={s.primaryFlyerWrap}>
-          <img
-            src="/static/vokim_experience_flyer1.jpg"
-            alt="VOKIM Experience 2026 Official Flyer"
-            style={s.primaryFlyer}
-          />
-        </div>
+        {posterKey && (
+          <div style={s.primaryFlyerWrap}>
+            <img
+              src={fullUrl(posterKey)}
+              alt="VOKIM Experience poster"
+              style={s.primaryFlyer}
+            />
+          </div>
+        )}
 
         {/* Details column */}
         <div style={s.detailsCol}>
@@ -118,18 +120,8 @@ const VokimExperience = () => {
           one: Jesus Christ.
         </p>
         <div style={s.teamButtons}>
-          <a href="/join" style={s.teamBtn}>Musicians</a>
-          <a href="/join" style={s.teamBtnOutline}>Non-Musicians</a>
+          <a href="/team" style={s.teamBtn}>Meet the Team →</a>
         </div>
-      </div>
-
-      {/* ── SECONDARY FLYER ── */}
-      <div style={s.secondaryFlyerWrap}>
-        <img
-          src="/static/vokim_experience_flyer2.jpg"
-          alt="VOKIM Experience 2026 — Band"
-          style={s.secondaryFlyer}
-        />
       </div>
 
       {/* ── SHARE / NEEDS YOU ── */}
@@ -168,10 +160,8 @@ const VokimExperience = () => {
               ))}
           </ul>
           <p style={s.bodyText}>
-            To get involved, contact us at{' '}
+            To get involved, email us at{' '}
             <a href="mailto:info@vokim.ca" style={s.goldLink}>info@vokim.ca</a>
-            {' '}or text{' '}
-            <a href="sms:7808072238" style={s.goldLink}>780-807-2238</a>
             {' '}and indicate the capacity you would like to serve.
           </p>
         </div>

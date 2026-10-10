@@ -11,6 +11,7 @@ import BandBookingLayout from './components/BandBookingLayout';
 import MessageLayout from './components/MessageLayout';
 import GalleryLayout from './components/GalleryLayout';
 import GalleryAdminLayout from './components/GalleryAdminLayout';
+import Team from './components/Team/Team';
 
 const AppRoutes = () => {
   return (
@@ -24,6 +25,8 @@ const AppRoutes = () => {
         <Route path="/join" element={<JoinLayout />} />
         <Route path="/gallery" element={<GalleryLayout />} />
         <Route path="/gallery/manage" element={<GalleryAdminLayout />} />
+        <Route path="/dashboard" element={<GalleryAdminLayout />} />
+        <Route path="/team" element={<Team />} />
         <Route path="/donate" element={<DonateLayout />} />
         <Route path="/band-book" element={<BandBookingLayout />} />
         <Route path="/message" element={<MessageLayout />} />
