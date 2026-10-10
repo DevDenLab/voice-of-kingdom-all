@@ -32,6 +32,7 @@ urlpatterns = [
     path("api/site/highlights/", site_content.HighlightsView.as_view(), name="site-highlights"),
     path("api/site/poster/", site_content.PosterView.as_view(), name="site-poster"),
     path("api/site/team/", site_content.TeamView.as_view(), name="site-team"),
+    path("api/site/event/", site_content.EventView.as_view(), name="site-event"),
 
     # Legacy top-level CSRF endpoint (kept for the existing frontend)
     path("csrf/", csrf, name="csrf"),

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { apiFetch } from '../../lib/api';
 import { fullUrl, teamUrl, thumbUrl } from '../../lib/imageUrl';
-import { EMPTY_CONTENT } from '../../lib/siteContent';
+import { EMPTY_CONTENT, mergeContent } from '../../lib/siteContent';
 import { moveItem, useDragSort } from './Sortable';
 
 const CONTENT_URL = '/api/site-content/';
@@ -19,7 +19,7 @@ function useContent() {
   const reload = useCallback(async () => {
     try {
       const data = await apiFetch(CONTENT_URL);
-      setContent({ ...EMPTY_CONTENT, ...data, poster: { ...EMPTY_CONTENT.poster, ...(data.poster || {}) } });
+      setContent(mergeContent(data));
       setLoadError('');
     } catch (err) {
       setLoadError(err.message);
@@ -190,7 +190,7 @@ export function PosterPanel() {
   const { content, reload, loadError } = useContent();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
-  const { key, show_countdown: showCountdown } = content.poster;
+  const { key } = content.poster;
 
   const upload = async ([file]) => {
     const fd = new FormData();
@@ -217,29 +217,14 @@ export function PosterPanel() {
     }
   };
 
-  const toggleCountdown = async (checked) => {
-    setError('');
-    try {
-      await apiFetch(POSTER_URL, { method: 'PATCH', body: JSON.stringify({ show_countdown: checked }) });
-      await reload();
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
   return (
     <>
       <h2 className="ga-subhead">VOKIM Experience poster</h2>
       <p className="ga-muted ga-panel-note">
-        Shown in the VOKIM Experience section of the home page. Uploading a new poster
-        replaces the current one.
+        Shown inside the Upcoming Event section of the home page (turn that section on in
+        the “Upcoming Event” tab). Uploading a new poster replaces the current one.
       </p>
       {(loadError || error) && <p className="ga-error">{loadError || error}</p>}
-
-      <label className="ga-switch">
-        <input type="checkbox" checked={showCountdown} onChange={(e) => toggleCountdown(e.target.checked)} />
-        <span>Show the “starts in” countdown on the home page hero</span>
-      </label>
 
       {key && (
         <div className="ga-poster">
@@ -256,6 +241,114 @@ export function PosterPanel() {
         onFiles={upload}
       />
       {!key && <p className="ga-muted">No poster yet — the home page shows the event details without one.</p>}
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Upcoming Event block on the home page
+// ---------------------------------------------------------------------------
+
+const EVENT_URL = '/api/site/event/';
+
+export function EventPanel() {
+  const { content, reload, loadError } = useContent();
+  const [form, setForm] = useState(content.event);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+  const [saved, setSaved] = useState(false);
+  const event = content.event;
+
+  // refresh the form whenever fresh data arrives from the server
+  useEffect(() => {
+    setForm(content.event);
+  }, [content.event]);
+
+  const set = (field) => (e) => {
+    setSaved(false);
+    setForm({ ...form, [field]: e.target.value });
+  };
+
+  // Switches save immediately -- no separate Save click needed.
+  const flip = async (url, field, value) => {
+    setError('');
+    try {
+      await apiFetch(url, { method: 'PATCH', body: JSON.stringify({ [field]: value }) });
+      await reload();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const TEXT_FIELDS = [
+    'label', 'title', 'subtitle', 'date', 'time', 'time_notes', 'location',
+    'admission', 'registration_url', 'registration_prompt', 'registration_label', 'countdown_date',
+  ];
+
+  const save = async (e) => {
+    e.preventDefault();
+    const body = {};
+    TEXT_FIELDS.forEach((f) => { body[f] = form[f] ?? ''; });
+    setSaving(true);
+    setError('');
+    setSaved(false);
+    try {
+      await apiFetch(EVENT_URL, { method: 'PATCH', body: JSON.stringify(body) });
+      await reload();
+      setSaved(true);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <>
+      <h2 className="ga-subhead">Upcoming Event</h2>
+      <p className="ga-muted ga-panel-note">
+        Controls the “Upcoming Event” block on the home page. Empty detail fields are simply
+        not shown. The “Watch the VOKIM Experience” link always stays on the page.
+      </p>
+      {(loadError || error) && <p className="ga-error">{loadError || error}</p>}
+
+      <label className="ga-switch">
+        <input type="checkbox" checked={event.enabled} onChange={(e) => flip(EVENT_URL, 'enabled', e.target.checked)} />
+        <span><strong>Show the Upcoming Event section</strong> (heading, poster, details)</span>
+      </label>
+      <label className="ga-switch">
+        <input type="checkbox" checked={event.registration_open} onChange={(e) => flip(EVENT_URL, 'registration_open', e.target.checked)} />
+        <span><strong>Registration is open</strong> — shows the register button (needs a link below)</span>
+      </label>
+      <label className="ga-switch">
+        <input type="checkbox" checked={content.poster.show_countdown} onChange={(e) => flip(POSTER_URL, 'show_countdown', e.target.checked)} />
+        <span><strong>Show the countdown</strong> at the top of the home page (needs a countdown date below)</span>
+      </label>
+
+      <form className="ga-eventform" onSubmit={save}>
+        <label>Small heading <input type="text" maxLength={60} value={form.label} onChange={set('label')} /></label>
+        <label>Event title <input type="text" maxLength={120} value={form.title} onChange={set('title')} /></label>
+        <label>Subtitle <input type="text" maxLength={160} value={form.subtitle} onChange={set('subtitle')} /></label>
+        <label>Date <input type="text" maxLength={120} placeholder="e.g. Saturday, June 26th, 2027" value={form.date} onChange={set('date')} /></label>
+        <label>Time <input type="text" maxLength={120} placeholder="e.g. 4:00 PM – 6:00 PM" value={form.time} onChange={set('time')} /></label>
+        <label>Time notes (one per line)
+          <textarea rows={3} maxLength={600} placeholder={'Doors open at 3:15 PM'} value={form.time_notes} onChange={set('time_notes')} />
+        </label>
+        <label>Location (one line per row)
+          <textarea rows={2} maxLength={300} placeholder={'15830 118 Ave NW\nEdmonton, AB'} value={form.location} onChange={set('location')} />
+        </label>
+        <label>Admission <input type="text" maxLength={60} placeholder="FREE" value={form.admission} onChange={set('admission')} /></label>
+        <label>Registration link <input type="url" maxLength={500} placeholder="https://…" value={form.registration_url} onChange={set('registration_url')} /></label>
+        <label>Text above the register button <input type="text" maxLength={200} value={form.registration_prompt} onChange={set('registration_prompt')} /></label>
+        <label>Register button text <input type="text" maxLength={60} value={form.registration_label} onChange={set('registration_label')} /></label>
+        <label>Countdown date &amp; time
+          <input type="datetime-local" value={form.countdown_date} onChange={set('countdown_date')} />
+        </label>
+        <div className="ga-eventform-actions">
+          <button type="submit" disabled={saving}>{saving ? 'Saving…' : 'Save event details'}</button>
+          {saved && <span className="ga-ok">Saved ✓</span>}
+        </div>
+      </form>
     </>
   );
 }

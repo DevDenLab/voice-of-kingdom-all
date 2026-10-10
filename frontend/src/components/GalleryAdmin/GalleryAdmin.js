@@ -3,12 +3,13 @@ import './GalleryAdmin.css';
 import { apiFetch } from '../../lib/api';
 import { galleryUrl } from '../../lib/imageUrl';
 import { moveItem, useDragSort } from './Sortable';
-import { HighlightsPanel, PosterPanel, TeamPanel } from './DashboardPanels';
+import { EventPanel, HighlightsPanel, PosterPanel, TeamPanel } from './DashboardPanels';
 
 const TABS = [
   { id: 'gallery', label: 'Gallery' },
-  { id: 'highlights', label: 'Event Highlights' },
+  { id: 'event', label: 'Upcoming Event' },
   { id: 'poster', label: 'Experience Poster' },
+  { id: 'highlights', label: 'Event Highlights' },
   { id: 'team', label: 'Team' },
 ];
 
@@ -339,6 +340,7 @@ const GalleryAdmin = () => {
         ))}
       </div>
 
+      {tab === 'event' && <EventPanel />}
       {tab === 'highlights' && <HighlightsPanel />}
       {tab === 'poster' && <PosterPanel />}
       {tab === 'team' && <TeamPanel />}

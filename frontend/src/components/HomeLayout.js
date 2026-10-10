@@ -43,10 +43,12 @@ const Home = () => {
       <MainContent
         imageUrl="/static/Band_Image.jpg"
         showCountdown={content.poster.show_countdown}
+        countdownTitle={`${content.event.title} STARTS IN`}
+        countdownDate={content.event.countdown_date}
       />
       <Quote />
       {/*<SpecialEvent /> */}
-      <VokimExperience posterKey={content.poster.key} />
+      <VokimExperience posterKey={content.poster.key} event={content.event} />
       {/*<AlbumDisplay />*/}
       {/*<AlbumDisplay2 />*/}
       {/*<AlbumDisplay3 />*/}

@@ -1,96 +1,120 @@
 import React from 'react';
 import { fullUrl } from '../../lib/imageUrl';
 
-const VokimExperience = ({ posterKey = null }) => {
+const VokimExperience = ({ posterKey = null, event = {} }) => {
+  const e = event;
+  const registerOpen = Boolean(e.registration_open && e.registration_url);
+  const splitLines = (text) =>
+    (text || '').split('\n').map((l) => l.trim()).filter(Boolean);
+  const timeNotes = splitLines(e.time_notes);
+  const locationLines = splitLines(e.location);
+
   return (
     <section style={s.section}>
 
-      {/* ── HEADER ── */}
-      <div style={s.headerBlock}>
-        <p style={s.upcomingLabel}>UPCOMING EVENT</p>
-        <h1 style={s.mainHeading}>VOKIM EXPERIENCE 2026</h1>
-        <p style={s.subHeading}>A Night of African Praise</p>
-      </div>
-
-      {/* ── POSTER + EVENT DETAILS ── (poster is uploaded from the dashboard) */}
-      <div style={s.contentRow}>
-
-        {posterKey && (
-          <div style={s.primaryFlyerWrap}>
-            <img
-              src={fullUrl(posterKey)}
-              alt="VOKIM Experience poster"
-              style={s.primaryFlyer}
-            />
+      {/* ── UPCOMING EVENT ── switched on/off and edited from the dashboard */}
+      {e.enabled && (
+        <>
+          <div style={s.headerBlock}>
+            {e.label && <p style={s.upcomingLabel}>{e.label}</p>}
+            <h1 style={s.mainHeading}>{e.title}</h1>
+            {e.subtitle && <p style={s.subHeading}>{e.subtitle}</p>}
           </div>
-        )}
 
-        {/* Details column */}
-        <div style={s.detailsCol}>
+          <div style={s.contentRow}>
 
-          <div style={s.detailItem}>
-            <span style={s.detailIcon}>📅</span>
-            <div>
-              <p style={s.detailLabel}>DATE</p>
-              <p style={s.detailValue}>Saturday, June 27th, 2026</p>
+            {posterKey && (
+              <div style={s.primaryFlyerWrap}>
+                <img
+                  src={fullUrl(posterKey)}
+                  alt={`${e.title} poster`}
+                  style={s.primaryFlyer}
+                />
+              </div>
+            )}
+
+            {/* Details column -- a row only appears if it has content */}
+            <div style={s.detailsCol}>
+
+              {e.date && (
+                <div style={s.detailItem}>
+                  <span style={s.detailIcon}>📅</span>
+                  <div>
+                    <p style={s.detailLabel}>DATE</p>
+                    <p style={s.detailValue}>{e.date}</p>
+                  </div>
+                </div>
+              )}
+
+              {(e.time || timeNotes.length > 0) && (
+                <div style={s.detailItem}>
+                  <span style={s.detailIcon}>🕓</span>
+                  <div>
+                    <p style={s.detailLabel}>TIME</p>
+                    {e.time && <p style={s.detailValue}>{e.time}</p>}
+                    {timeNotes.map((line) => (
+                      <p key={line} style={s.detailNote}>{line}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {locationLines.length > 0 && (
+                <div style={s.detailItem}>
+                  <span style={s.detailIcon}>📍</span>
+                  <div>
+                    <p style={s.detailLabel}>LOCATION</p>
+                    {locationLines.map((line) => (
+                      <p key={line} style={s.detailValue}>{line}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {e.admission && (
+                <div style={s.detailItem}>
+                  <span style={s.detailIcon}>🎟️</span>
+                  <div>
+                    <p style={s.detailLabel}>ADMISSION</p>
+                    <p style={s.freeText}>{e.admission}</p>
+                  </div>
+                </div>
+              )}
+
+              {registerOpen && (
+                <>
+                  {e.registration_prompt && <p style={s.registerPrompt}>{e.registration_prompt}</p>}
+                  <a
+                    href={e.registration_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={s.registerBtn}
+                    onMouseOver={ev => ev.currentTarget.style.backgroundColor = '#b8861a'}
+                    onMouseOut={ev => ev.currentTarget.style.backgroundColor = '#E4A11B'}
+                  >
+                    {e.registration_label || 'REGISTER →'}
+                  </a>
+                </>
+              )}
+
             </div>
           </div>
+        </>
+      )}
 
-          <div style={s.detailItem}>
-            <span style={s.detailIcon}>🕓</span>
-            <div>
-              <p style={s.detailLabel}>TIME</p>
-              <p style={s.detailValue}>4:00 PM – 6:00 PM</p>
-              <p style={s.detailNote}>Doors open at 3:15 PM</p>
-              <p style={s.detailNote}>
-                Guests are welcome to enjoy a Hymns Medley, Red Carpet reception, and photo opportunities.
-              </p>
-            </div>
-          </div>
-
-          <div style={s.detailItem}>
-            <span style={s.detailIcon}>📍</span>
-            <div>
-              <p style={s.detailLabel}>LOCATION</p>
-              <p style={s.detailValue}>15830 118 Ave NW</p>
-              <p style={s.detailValue}>Edmonton, AB T5V 0A9</p>
-            </div>
-          </div>
-
-          <div style={s.detailItem}>
-            <span style={s.detailIcon}>🎟️</span>
-            <div>
-              <p style={s.detailLabel}>ADMISSION</p>
-              <p style={s.freeText}>FREE</p>
-            </div>
-          </div>
-
-          <p style={s.registerPrompt}>Click the link below to register for free:</p>
-          <a
-            href="https://www.eventbrite.ca/e/vokim-experience-2026-african-praise-tickets-1983321532092?aff=oddtdtcreator"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={s.registerBtn}
-            onMouseOver={e => e.currentTarget.style.backgroundColor = '#b8861a'}
-            onMouseOut={e => e.currentTarget.style.backgroundColor = '#E4A11B'}
-          >
-            REGISTER FOR FREE →
-          </a>
-
-          {/* TikTok */}
-          <a
-            href="https://vt.tiktok.com/ZSuF1WpNs/"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={s.tiktokLink}
-            onMouseOver={e => e.currentTarget.style.borderColor = '#E4A11B'}
-            onMouseOut={e => e.currentTarget.style.borderColor = 'rgba(228,161,27,0.4)'}
-          >
-            <span style={s.tiktokIcon}>▶</span>
-            <span>Watch the VOKIM Experience</span>
-          </a>
-
-        </div>
+      {/* ── WATCH PREVIOUS EXPERIENCES ── always visible */}
+      <div style={s.watchWrap}>
+        <a
+          href="https://vt.tiktok.com/ZSuF1WpNs/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={s.tiktokLink}
+          onMouseOver={ev => ev.currentTarget.style.borderColor = '#E4A11B'}
+          onMouseOut={ev => ev.currentTarget.style.borderColor = 'rgba(228,161,27,0.4)'}
+        >
+          <span style={s.tiktokIcon}>▶</span>
+          <span>Watch the VOKIM Experience</span>
+        </a>
       </div>
 
       {/* ── ABOUT THE VOKIM EXPERIENCE ── */}
@@ -224,23 +248,27 @@ const VokimExperience = ({ posterKey = null }) => {
         </div>
       </div>
 
-      {/* ── THANK YOU ── */}
-      <div style={s.thankYou}>
-        <p style={s.thankYouText}>
-          Thank you for your support!<br />
-          <span style={s.thankYouSub}>Looking forward to seeing you at the venue.</span>
-        </p>
-        <a
-          href="https://www.eventbrite.ca/e/vokim-experience-2026-african-praise-tickets-1983321532092?aff=oddtdtcreator"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={s.registerBtn}
-          onMouseOver={e => e.currentTarget.style.backgroundColor = '#b8861a'}
-          onMouseOut={e => e.currentTarget.style.backgroundColor = '#E4A11B'}
-        >
-          REGISTER FOR FREE →
-        </a>
-      </div>
+      {/* ── THANK YOU ── only while an event is being promoted */}
+      {e.enabled && (
+        <div style={s.thankYou}>
+          <p style={s.thankYouText}>
+            Thank you for your support!<br />
+            <span style={s.thankYouSub}>Looking forward to seeing you at the venue.</span>
+          </p>
+          {registerOpen && (
+            <a
+              href={e.registration_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ ...s.registerBtn, alignSelf: 'center' }}
+              onMouseOver={ev => ev.currentTarget.style.backgroundColor = '#b8861a'}
+              onMouseOut={ev => ev.currentTarget.style.backgroundColor = '#E4A11B'}
+            >
+              {e.registration_label || 'REGISTER →'}
+            </a>
+          )}
+        </div>
+      )}
 
       <style>{`
         @media (max-width: 900px) {
@@ -317,6 +345,7 @@ const s = {
     textAlign: 'center', transition: 'background-color 0.2s ease',
     alignSelf: 'flex-start', textTransform: 'uppercase',
   },
+  watchWrap: { display: 'flex', justifyContent: 'center', margin: '0 auto 3rem auto' },
   tiktokLink: {
     display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
     color: 'rgba(255,255,255,0.85)', fontSize: '0.95rem', fontWeight: '600',

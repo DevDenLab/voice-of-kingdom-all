@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
-const MainContent = ({ imageUrl, showCountdown = false }) => {
+const MainContent = ({ imageUrl, showCountdown = false, countdownTitle = '', countdownDate = '' }) => {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -13,7 +13,7 @@ const MainContent = ({ imageUrl, showCountdown = false }) => {
   useEffect(() => {
     // Set the target date to March 15th of the current year
     const calculateTimeLeft = () => {
-      const targetDate = new Date('2026-06-27T00:00:00');
+      const targetDate = new Date(countdownDate);
       const now = new Date();
       const difference = targetDate - now;
 
@@ -50,7 +50,11 @@ const MainContent = ({ imageUrl, showCountdown = false }) => {
 
     // Clear the interval when the component unmounts
     return () => clearInterval(timer);
-  }, []);
+  }, [countdownDate]);
+
+  // Only show a countdown that has a valid target date still in the future
+  const targetMs = new Date(countdownDate).getTime();
+  const countdownVisible = showCountdown && !Number.isNaN(targetMs) && targetMs > Date.now();
 
   const scrollToNextSection = () => {
     const nextSection = document.getElementById('next-section');
@@ -69,9 +73,9 @@ const MainContent = ({ imageUrl, showCountdown = false }) => {
       <div className="hero-section-home" style={{ '--bg-image': `url(${imageUrl})` }}>
         <div className="hero-overlay-home"></div>
         <div className="hero-content">
-          {showCountdown && (
+          {countdownVisible && (
           <div className="countdown-container">
-            <div className="countdown-title">VOKIM EXPERIENCE 2026 STARTS IN</div>
+            <div className="countdown-title">{countdownTitle}</div>
             <div className="countdown-timer">
               <div className="countdown-item">
                 <div className="countdown-value">{timeLeft.days}</div>

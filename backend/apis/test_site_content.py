@@ -41,10 +41,63 @@ class SiteContentTests(TestCase):
     def test_public_content_defaults_when_empty(self):
         r = self.client.get("/api/site-content/")
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(
-            r.json(),
-            {"highlights": [], "poster": {"key": None, "show_countdown": False}, "team": []},
+        body = r.json()
+        self.assertEqual(body["highlights"], [])
+        self.assertEqual(body["poster"], {"key": None, "show_countdown": False})
+        self.assertEqual(body["team"], [])
+        # event section is off by default and registration is closed
+        self.assertFalse(body["event"]["enabled"])
+        self.assertFalse(body["event"]["registration_open"])
+
+    # ---- event ----
+    def test_event_update_and_public_read(self):
+        self._login()
+        r = self.client.patch(
+            "/api/site/event/",
+            {
+                "enabled": True,
+                "title": "VOKIM EXPERIENCE 2027",
+                "date": "Saturday, June 26th, 2027",
+                "location": "Line one\nLine two",
+                "registration_open": True,
+                "registration_url": "https://example.com/register",
+                "countdown_date": "2027-06-26T16:00",
+            },
+            format="json",
         )
+        self.assertEqual(r.status_code, 200)
+        event = self.client.get("/api/site-content/").json()["event"]
+        self.assertTrue(event["enabled"])
+        self.assertTrue(event["registration_open"])
+        self.assertEqual(event["date"], "Saturday, June 26th, 2027")
+        self.assertEqual(event["location"], "Line one\nLine two")
+        self.assertEqual(event["countdown_date"], "2027-06-26T16:00")
+        # untouched fields keep their defaults
+        self.assertEqual(event["admission"], "FREE")
+
+    def test_event_partial_update_keeps_other_fields(self):
+        self._login()
+        self.client.patch("/api/site/event/", {"title": "A"}, format="json")
+        self.client.patch("/api/site/event/", {"subtitle": "B"}, format="json")
+        event = self._manifest()["event"]
+        self.assertEqual((event["title"], event["subtitle"]), ("A", "B"))
+
+    def test_event_validation(self):
+        self._login()
+        bad = [
+            {"enabled": "maybe"},
+            {"registration_url": "javascript:alert(1)"},
+            {"countdown_date": "next friday"},
+            {"title": "x" * 500},
+            {"title": 5},
+            {},
+        ]
+        for payload in bad:
+            r = self.client.patch("/api/site/event/", payload, format="json")
+            self.assertEqual(r.status_code, 400, payload)
+
+    def test_event_requires_staff(self):
+        self.assertEqual(self.client.patch("/api/site/event/", {"enabled": True}, format="json").status_code, 403)
 
     def test_writes_require_staff(self):
         for url in ("/api/site/highlights/", "/api/site/poster/", "/api/site/team/"):

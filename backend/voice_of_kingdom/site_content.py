@@ -23,6 +23,7 @@ import logging
 import mimetypes
 import os
 import secrets
+from datetime import datetime
 
 from botocore.exceptions import BotoCoreError, ClientError
 from django.conf import settings
@@ -51,8 +52,49 @@ def _content_key():
     return f"{settings.SITE_PREFIX}content.json"
 
 
+# Home page "Upcoming Event" block. Text fields are free text (max length below);
+# empty detail fields are simply not shown on the page.
+EVENT_TEXT_FIELDS = {
+    "label": 60,
+    "title": 120,
+    "subtitle": 160,
+    "date": 120,
+    "time": 120,
+    "time_notes": 600,
+    "location": 300,
+    "admission": 60,
+    "registration_prompt": 200,
+    "registration_label": 60,
+}
+EVENT_BOOL_FIELDS = ("enabled", "registration_open")
+
+
+def _default_event():
+    return {
+        "enabled": False,
+        "label": "UPCOMING EVENT",
+        "title": "VOKIM EXPERIENCE 2027",
+        "subtitle": "A Night of African Praise",
+        "date": "",
+        "time": "",
+        "time_notes": "",
+        "location": "",
+        "admission": "FREE",
+        "registration_open": False,
+        "registration_url": "",
+        "registration_prompt": "Click the link below to register for free:",
+        "registration_label": "REGISTER FOR FREE →",
+        "countdown_date": "",  # local date-time "YYYY-MM-DDTHH:MM" the hero countdown runs to
+    }
+
+
 def _empty():
-    return {"highlights": [], "poster": {"key": None, "show_countdown": False}, "team": []}
+    return {
+        "highlights": [],
+        "poster": {"key": None, "show_countdown": False},
+        "team": [],
+        "event": _default_event(),
+    }
 
 
 def _load(client):
@@ -76,6 +118,10 @@ def _load(client):
         out["poster"]["show_countdown"] = bool(data["poster"].get("show_countdown"))
     if isinstance(data.get("team"), list):
         out["team"] = [m for m in data["team"] if isinstance(m, dict) and m.get("id")]
+    if isinstance(data.get("event"), dict):
+        for field, value in data["event"].items():
+            if field in out["event"] and isinstance(value, type(out["event"][field])):
+                out["event"][field] = value
     return out
 
 
@@ -383,3 +429,69 @@ class TeamView(_AdminView):
         except (ClientError, BotoCoreError) as exc:
             return _storage_error(exc, "team delete")
         return Response({"deleted": member_id})
+
+
+class EventView(_AdminView):
+    """Home "Upcoming Event" block: on/off, the text shown, registration on/off + link,
+    and the hero countdown's target date. PATCH takes any subset of the fields."""
+
+    def patch(self, request):
+        incoming = request.data
+        changes = {}
+
+        for field in EVENT_BOOL_FIELDS:
+            if field in incoming:
+                value = incoming[field]
+                if isinstance(value, str):
+                    value = {"true": True, "1": True, "on": True, "false": False, "0": False, "off": False}.get(
+                        value.strip().lower()
+                    )
+                if not isinstance(value, bool):
+                    return Response({"detail": f"'{field}' must be true or false."}, status=400)
+                changes[field] = value
+
+        for field, limit in EVENT_TEXT_FIELDS.items():
+            if field in incoming:
+                value = incoming[field]
+                if not isinstance(value, str):
+                    return Response({"detail": f"'{field}' must be text."}, status=400)
+                value = value.strip()
+                if len(value) > limit:
+                    return Response({"detail": f"'{field}' is too long (max {limit} characters)."}, status=400)
+                changes[field] = value
+
+        if "registration_url" in incoming:
+            url = incoming["registration_url"]
+            if not isinstance(url, str):
+                return Response({"detail": "'registration_url' must be text."}, status=400)
+            url = url.strip()
+            if url and not (url.startswith("https://") or url.startswith("http://")) or len(url) > 500:
+                return Response(
+                    {"detail": "The registration link must start with https:// (or be left empty)."},
+                    status=400,
+                )
+            changes["registration_url"] = url
+
+        if "countdown_date" in incoming:
+            when = incoming["countdown_date"]
+            if not isinstance(when, str):
+                return Response({"detail": "'countdown_date' must be text."}, status=400)
+            when = when.strip()
+            if when:
+                try:
+                    datetime.strptime(when, "%Y-%m-%dT%H:%M")
+                except ValueError:
+                    return Response({"detail": "Countdown date must look like 2027-06-26T16:00."}, status=400)
+            changes["countdown_date"] = when
+
+        if not changes:
+            return Response({"detail": "Nothing to update."}, status=400)
+
+        client = gallery._s3_client()
+        try:
+            data = _load(client)
+            data["event"].update(changes)
+            _save(client, data)
+        except (ClientError, BotoCoreError) as exc:
+            return _storage_error(exc, "event update")
+        return Response(data["event"])
